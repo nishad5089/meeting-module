@@ -1,0 +1,64 @@
+.example-form {
+  min-width: 150px;
+  max-width: 100%;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.example-full-width-modal {
+  width: 90%;
+  margin-left: 2%;
+}
+.example-full-width-type {
+  width: 45%;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  width: 100%;
+}
+
+.example-container > * {
+  width: 100%;
+}
+
+.example-container form {
+  margin-bottom: 20px;
+}
+
+.example-container form > * {
+  margin: 5px 0;
+}
+
+.row {
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-serialNo {
+  flex: 0 0 20%;
+  padding-left: 1%;
+}
+
+.mat-column-agenda {
+  flex: 0 0 50%;
+  padding-left: 5%;
+}
+
+.mat-column-actions {
+  flex: 0 0 20%;
+  padding-left: 2%;
+}
+
+.example-fill-remaining-space {
+  flex: 1 1 auto;
+}

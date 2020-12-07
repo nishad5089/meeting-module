@@ -1,0 +1,163 @@
+<div class="overlay"
+     *ngIf="isLoadingResults">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<mat-card>
+  <table class="table" style="border: none" border="0">
+    <tr>
+      <td width="85%" style="border: none">
+        <mat-form-field style="display: inline; width: 30%">
+          <mat-label>অনুসন্ধান</mat-label>
+          <input matInput placeholder="অনুসন্ধানের শব্দাংশ লিখুন" (keyup)="applyFilter($event.target.value)" />
+        </mat-form-field>
+      </td>
+      <td class="float-right" style="border: none">
+        <a class="btn btn-secondary" matTooltip="{{'অনুসন্ধানের ফিল্টার ঠিক করুন​'}}"
+           (click)="showFilters=!showFilters" style="margin-right: 5px;">
+          <i class="fa fa-filter"></i>
+        </a>
+        <a class="btn btn-primary" (click)="add()"
+           matTooltip="{{addButtonTooltips}}">
+          <i class="fa fa-plus"></i>
+        </a>
+      </td>
+    </tr>
+  </table>
+  <mat-card-content [hidden]="!showFilters">
+    <div class="row">
+      <!--<mat-form-field class="col-md-6">
+        <mat-label>{{'ভবন​'}}</mat-label>
+        <mat-select placeholder="{{'ভবন​ বাছাই করুন'}}" disableOptionCentering
+                    [(ngModel)]="dto.buildingOid">
+          <mat-option *ngFor="let building of buildings" [value]="building.oid">
+            {{building.buildingName | titlecase}}, {{building.address | titlecase}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>-->
+      <div class="col-md-6">
+        <app-building
+          [reset]="resetVal"
+          [isRequired]="false"
+          [selectedValue]="null"
+          (changed)="setBuilding($event)"
+        >
+        </app-building>
+      </div>
+
+      <mat-form-field class="col-md-6">
+        <mat-label>{{'শিরোনাম​'}}</mat-label>
+        <input matInput [(ngModel)]="dto.roomName" placeholder="{{'শিরোনাম​ দিয়ে অনুসন্ধান'}}">
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions [hidden]="!showFilters" align="end">
+    <a class="btn btn-secondary" (click)="reset()" style="margin-right: 5px" matTooltip="{{'অনুসন্ধানের ফিল্ডগুলো রিসেট করুন​'}}">
+      <i class="fa fa-refresh"></i>
+    </a>
+    <a class="btn btn-primary" (click)="search(dto)"
+      matTooltip="{{'অনুসন্ধান করুন​'}}">
+      <i class="fa fa-search"></i>
+    </a>
+  </mat-card-actions>
+</mat-card>
+<br/>
+<div>
+  <div class="mem-list-table-container">
+    <table mat-table multiTemplateDataRows [dataSource]="dataSource" class="mem-table-full-width" matSort>
+      <!--    serial No -->
+      <ng-container matColumnDef="sl">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">{{'ক্রমিক নং'}}</th>
+        <td mat-cell *matCellDef="let element">{{ dataSource.data.indexOf(element) + 1 | localNumber}}</td>
+      </ng-container>
+
+      <!-- Room Name   -->
+      <ng-container matColumnDef="roomName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'কক্ষের নাম​'}}</th>
+        <td mat-cell *matCellDef="let element">{{element.roomName | titlecase}}</td>
+      </ng-container>
+
+      <!-- Room Capacity -->
+      <ng-container matColumnDef="roomCapacity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'ধারণ ক্ষমতা'}}</th>
+        <td mat-cell *matCellDef="let element">{{element.roomCapacity | localNumber}}{{ ' জন' }}</td>
+      </ng-container>
+
+      <!--   Building Name-->
+      <ng-container matColumnDef="building">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">{{'ভবন​'}}</th>
+        <td mat-cell *matCellDef="let element">
+          {{getBuildingName(element.buildingOid).buildingName}}<br>
+          {{getBuildingName(element.buildingOid).address}}
+        </td>
+      </ng-container>
+
+      <!--   Action -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef style="text-align: right; justify-content: flex-end">{{'অ্যাকশন'}}</th>
+        <td mat-cell *matCellDef="let element" style="text-align: right">
+          <a class="btn btn-danger" matTooltip="কক্ষ​ মুছে ফেলুন​" [hidden]="element.officeOid !== userOfficeOid"
+                  (click)="delete(element);$event.stopPropagation();" style="margin-right: 5px;">
+            <i class="fa fa-trash"></i>
+          </a>
+          <a class="btn btn-secondary" matTooltip="কক্ষ​ সম্পাদনা করুন​" [hidden]="element.officeOid !== userOfficeOid"
+             (click)="update(element);$event.stopPropagation();">
+            <i class="fa fa-edit"></i>
+          </a>
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" style="text-align: left; font-size: medium"
+            [attr.colspan]="displayColumns.length">
+          <div class="example-element-detail"
+               [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'">
+            <div class="example-element-description, col-md-6" style="padding-left: 100px">
+              <mat-label><strong> {{ ' ফ্লোর নাম্বার '}}:</strong></mat-label>
+              {{ element?.floorNo === undefined
+            || element?.floorNo === null
+            || element?.floorNo.trim().length === 0 ? 'N/A': element?.floorNo | titlecase}}<br>
+              <mat-label><strong> {{ ' কক্ষ নং ' }}:</strong></mat-label>
+              {{ element?.roomNo === undefined
+            || element?.roomNo === null
+            || element?.roomNo.trim().length === 0 ? 'N/A': element?.roomNo | titlecase }}<br>
+              <mat-label><strong> {{ ' কক্ষের কোড ' }}:</strong></mat-label>
+              {{ element?.roomCode === undefined
+            || element?.roomCode === null
+            || element?.roomCode.trim().length === 0 ? 'N/A': element?.roomCode | titlecase }}<br>
+            </div>
+            <div class="example-element-description, col-md-6">
+              <mat-label><strong> {{ 'যেসকল অফিসের সাথে কক্ষটি শেয়ার করা হয়েছে ' }}:</strong></mat-label>
+              <ul>
+                <li *ngFor="let sharedRoom of getSharedOffices(element)">
+                  {{sharedRoom}}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="disclaimer">
+        <td mat-footer-cell *matFooterCellDef [colSpan]="displayColumns.length" align="center">
+          {{'কোনো কক্ষ​ পাওয়া যায়নি'}}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayColumns; sticky:true"></tr>
+      <tr [hidden]="dataSource.data.length === 0" mat-row *matRowDef="let row, columns: displayColumns"
+          class="example-element-row"
+          [class.example-expanded-row]="expandedElement === row"
+          (click)="expandedElement = expandedElement === row ? null : row">
+
+      </tr>
+      <tr [hidden]="dataSource.data.length === 0" mat-row *matRowDef="let row; columns:['expandedDetail']"
+          [class.example-expanded-row]="expandedElement === null"
+          (click)="expandedElement = expandedElement === row ? row : null"
+          class="example-detail-row"></tr>
+      <tr [hidden]="dataSource.data.length !== 0" mat-footer-row *matFooterRowDef="['disclaimer']"
+          class="example-second-footer-row"></tr>
+    </table>
+  </div>
+  <mat-paginator [pageSizeOptions]="[25, 50, 100, 200]"></mat-paginator>
+</div>

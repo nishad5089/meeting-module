@@ -1,0 +1,19 @@
+<div mat-dialog-content class="bg-light-one">
+  <mat-tab-group mat-stretch-tabs>
+    <mat-tab label="কর্মকর্তা / কর্মচারী" (click)="changeTab('কর্মকর্তা / কর্মচারী')">
+      <app-employees [employeesOid]="employeesOid" (newEmployeesOid)="handleEmployeeEvent($event)"></app-employees>
+    </mat-tab>
+    <mat-tab label="অতিথিবৃন্দ" (click)="changeTab('অতিথিবৃন্দ')" *ngIf="isShowed()">
+      <app-guests [guestsOid]="guestsOid" (newGuestsOid)="handleGuestEvent($event)"></app-guests>
+    </mat-tab>
+    <mat-tab label="গ্রুপ সমূহ" *ngIf="isShowed()">
+      <app-groups (newGroupsOid)="handleGroupEvent($event)"></app-groups>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="accent"  (click)="closeModal()">{{ 'বন্ধ​ করুন' }}
+  </button>
+  <button mat-raised-button color="primary" (click)="validateAndSave()">{{ 'সদস্য হিসেবে অন্তর্ভুক্ত করুন' }}
+  </button>
+</div>

@@ -1,0 +1,76 @@
+<mat-card style="min-height: 55vh;">
+  <mat-card-content>
+    <form class="example-form" [formGroup]="backgroundForm" novalidate>
+      <mat-form-field>
+        <mat-label>{{ ' ই-নথি সূত্র ' }}</mat-label>
+        <input matInput placeholder="ই-নথি সূত্র লিখুন"
+               formControlName="eNothiReference" (ngModelChange)="submitForm()">
+        <mat-error *ngIf="errorHandling('eNothiReference', 'pattern')">
+          Please provide a valid e-Nothi reference
+        </mat-error>
+      </mat-form-field>
+
+      <app-previous-reference
+        [selectedValue]="undefined"
+        (changed)="submitForm($event)"
+      >
+      </app-previous-reference>
+        <!--  <mat-error *ngIf="errorHandling('previousMeetingReference', 'pattern')">
+            Please provide a valid previous meeting reference
+          </mat-error>-->
+
+      <mat-form-field>
+        <mat-label>{{ ' ব্যাকগ্রাউন্ড ' }}</mat-label>
+        <textarea matInput placeholder="ব্যাকগ্রাউন্ড লিখুন"
+                  formControlName="background" (ngModelChange)="submitForm()"></textarea>
+      </mat-form-field>
+      <mat-error *ngIf="errorHandling('background', 'pattern')">
+        Please provide a valid background description
+      </mat-error>
+      <button mat-icon-button style="color: white; background: #673ab7; float:right; margin:27px"
+              matTooltip="ব্যাকগ্রাউন্ড নথি আপলোড​ করুন"
+              (click)="openDialog()">
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+    </form>
+
+    <br><br>
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">{{ ' ব্যাকগ্রাউন্ড নথিসমূহ' }}</h3><br>
+        <div>
+          <table mat-table [dataSource]="dataSource">
+
+            <!-- Serial Column -->
+            <ng-container matColumnDef="serialNo">
+              <th mat-header-cell *matHeaderCellDef style="text-align: center;">{{ ' ক্রমিক নং ' }}</th>
+              <td mat-cell *matCellDef="let row; let i = index" style="text-align: center;"> {{i + 1 | localNumber}} </td>
+            </ng-container>
+
+            <!-- File Name Column -->
+            <ng-container matColumnDef="fileTitle">
+              <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 70%;">{{ ' নথির নাম ' }}</th>
+              <td mat-cell *matCellDef="let row" style="text-align: left;"> {{row.fileTitle}} </td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef style="text-align: center;">{{ ' অ্যাকশন ' }}</th>
+              <td mat-cell *matCellDef="let row; let i = index" style="text-align: center;">
+                <a
+                  class="btn btn-danger" matTooltip="{{'মুছে ফেলুন​'}}​"
+                  (click)="deleteFile(i)">
+                  <i class="fa fa-trash"></i>
+                </a>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

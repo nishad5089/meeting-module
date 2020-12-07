@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{ ' সংযুক্তি আপলোড করুন ' }}</h1>
+<div mat-dialog-content>
+    <input type="file" accept="application/msword, application/pdf, application/vnd.ms-excel, text/plain"
+           multiple (change)="addNew($event)">
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" (click)="onNoClick()">{{ ' বন্ধ​ করুন ' }}</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>{{ ' সংরক্ষণ করুন ' }}</button>
+</div>

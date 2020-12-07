@@ -1,0 +1,561 @@
+<mat-card style="min-height: 55vh;">
+  <mat-card-content>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'নোটিশ' }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div [hidden]="hasPermission(actionTagUploadNotice)=== false || notices.length > 0"
+             style="display: flex; justify-content: flex-end; align-content: flex-start">
+          <button mat-icon-button style="color: white; background: #673ab7; margin-left: 2%;"
+                  matTooltip="নোটিশ আপলোড​ করুন"
+                  (click)="openDocumentUploadDialog('notice')">
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
+        <br>
+        <div class="box">
+          <div class="box-header">
+            <div>
+              <table mat-table #noticeSort="matSort" [dataSource]="dataSourceOfNotice" matSort>
+
+                <!-- Serial Column -->
+                <ng-container matColumnDef="serialNo">
+                  <th mat-header-cell *matHeaderCellDef
+                      style="text-align: center; width: 10%;"> {{ ' ক্রমিক নং ' }}</th>
+                  <td mat-cell *matCellDef="let row; let i = index"
+                      style="text-align: center"> {{i + 1 | localNumber}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="notice">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 30%;">{{ ' নোটিশ ' }}</th>
+                  <td mat-cell *matCellDef="let row" style="text-align: center"> {{row.fileTitle }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="comment">
+                  <th mat-header-cell *matHeaderCellDef
+                      style="text-align: center; width: 40%;">{{ ' অনুমোদনকারীর মন্তব্য ' }}</th>
+                  <td mat-cell *matCellDef="let row"
+                      style="text-align: center"> {{currentNoticeComment}} </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center;"> {{ ' অ্যাকশন ' }}</th>
+                  <td mat-cell *matCellDef="let row" style="text-align: center">
+                    <a class="btn btn-secondary" matTooltip="ফাইল দেখুন​"
+                       (click)="viewFile(row)"style="margin-right: 5px;">
+                      <i class="fa fa-file-pdf-o"></i>
+                    </a>
+                    <a class="btn btn-danger" matTooltip="ফাইল মুছে ফেলুন​"
+                       [hidden]="hasPermission(actionTagDeleteNotice)=== false"
+                       (click)="deleteFile(row)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsOfNotice"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsOfNotice;">
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div style="font-family: Kalpurush; padding: 15px 5px 5px;"
+             [hidden]="!noticeForwardingInfos || !noticeForwardingInfos.length">
+          <h6>
+            {{ 'পূর্ববর্তী মন্তব্যসমূহ​​' }}
+          </h6>
+          <ul class="list-group" style="padding-left: 40px;">
+            <li *ngFor="let info of noticeForwardingInfos; let i = index">
+              {{info.comment}}, {{info.updatedOn | date: 'fullDate' | localNumber}}
+            </li>
+          </ul>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'ব্যাকগ্রাউন্ড নথিসমূহ' }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div [hidden]="hasPermission(actionTagUploadBackgroundFile)=== false"
+             style="display: flex; justify-content: flex-end; align-content: flex-start">
+          <button mat-icon-button style="color: white; background: #673ab7; margin-left: 2%;"
+                  matTooltip="ব্যাকগ্রাউন্ড নথি আপলোড​ করুন"
+                  (click)="openDocumentUploadDialog('background_wp')">
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
+        <div class="box">
+          <div class="box-header">
+            <div>
+              <table mat-table #backgroundFilesSort="matSort" [dataSource]="dataSourceOfBackgroundFiles" matSort>
+
+                <!-- Serial Column -->
+                <ng-container matColumnDef="serialNo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ ' ক্রমিক নং ' }}</th>
+                  <td mat-cell *matCellDef="let row; let i = index"> {{i + 1 | localNumber}} </td>
+                </ng-container>
+
+                <!-- Background File Column -->
+                <ng-container matColumnDef="backgroundFile">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ ' ব্যাকগ্রাউন্ড নথি ' }}</th>
+                  <td mat-cell *matCellDef="let row"> {{ row?.fileTitle }} </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ ' অ্যাকশন ' }}</th>
+                  <td mat-cell *matCellDef="let row">
+                    <a class="btn btn-secondary" matTooltip="ফাইল দেখুন​"
+                       (click)="viewFile(row)" style="margin-right: 5px;">
+                      <i class="fa fa-file-pdf-o"></i>
+                    </a>
+                    <a class="btn btn-danger" matTooltip="ফাইল মুছে ফেলুন​"
+                       [hidden]="hasPermission(actionTagDeleteBackgroundFile)=== false"
+                       (click)="deleteFile(row)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsOfBackgroundFiles"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsOfBackgroundFiles;">
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'গৃহীত কার্যপত্রসমূহ' }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="box">
+          <div class="box-header">
+            <div>
+              <table mat-table #workingPapersSort="matSort" [dataSource]="dataSourceOfWorkingPapers" matSort>
+
+                <!-- Serial Column -->
+                <ng-container matColumnDef="serialNo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ ' ক্রমিক নং ' }}</th>
+                  <td mat-cell style="text-align: center"
+                      *matCellDef="let row; let i = index"> {{i + 1 | localNumber}} </td>
+                </ng-container>
+
+                <!-- working paper name Column -->
+                <ng-container matColumnDef="workingPaper">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ ' কার্যপত্র ' }}</th>
+                  <td mat-cell *matCellDef="let row"> {{ row?.fileTitle }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="uploadedBy">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ ' আপলোডকারী ' }}</th>
+                  <td mat-cell
+                      *matCellDef="let row; let i = index">{{ getEmployeeName(receivedWorkingPapers[i].createdBy) }}</td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ ' অ্যাকশন ' }}</th>
+                  <td mat-cell style="text-align: center" *matCellDef="let row">
+                    <a class="btn btn-secondary" matTooltip="ফাইল দেখুন​"
+                       (click)="viewFile(row)" style="margin-right: 5px;">
+                      <i class="fa fa-file-pdf-o"></i>
+                    </a>
+                    <a class="btn btn-danger" matTooltip="ফাইল মুছে ফেলুন​"
+                       [hidden]="hasPermission(actionTagDeleteReceivedWP)=== false"
+                       (click)="deleteFile(row)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsOfWorkingPapers"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsOfWorkingPapers;">
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'চূড়ান্ত কার্যপত্র' }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div [hidden]="hasPermission(actionTagUploadFinalWP) === false || finalWorkingPapers.length !== 0"
+             style="display: flex; justify-content: flex-end; align-content: flex-start">
+          <button mat-icon-button style="color: white; background: #673ab7; margin-left: 2%;"
+                  matTooltip="চূড়ান্ত কার্যপত্র আপলোড​ করুন"
+                  (click)="openDocumentUploadDialog('final_wp')">
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
+        <div class="box">
+          <div class="box-header">
+            <div>
+              <table mat-table #finalWorkingPaperSort="matSort" [dataSource]="dataSourceOfFinalWorkingPaper" matSort>
+
+                <!-- Serial Column -->
+                <ng-container matColumnDef="serialNo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ ' ক্রমিক নং ' }}</th>
+                  <td mat-cell *matCellDef="let row; let i = index"> {{i + 1 | localNumber}} </td>
+                </ng-container>
+
+                <!-- Attachment Column -->
+                <ng-container matColumnDef="finalWorkingPaper">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ ' চূড়ান্ত কার্যপত্র ' }}</th>
+                  <td mat-cell *matCellDef="let row"> {{ row?.fileTitle }} </td>
+                </ng-container>
+
+                <!-- Attachment Type Column -->
+                <ng-container matColumnDef="uploadedBy">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ ' আপলোডকারী ' }}</th>
+                  <td mat-cell
+                      *matCellDef="let row; let i = index">{{ getEmployeeName(finalWorkingPapers[i].createdBy) }}</td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ ' অ্যাকশন ' }}</th>
+                  <td mat-cell *matCellDef="let row">
+                    <a class="btn btn-secondary" matTooltip="ফাইল দেখুন​"
+                       (click)="viewFile(row)" style="margin-right: 5px;">
+                      <i class="fa fa-file-pdf-o"></i>
+                    </a>
+                    <a class="btn btn-danger" matTooltip="ফাইল মুছে ফেলুন​"
+                       [hidden]="hasPermission(actionTagDeleteFinalWP)=== false"
+                       (click)="deleteFile(row)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsOfFinalWorkingPaper"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsOfFinalWorkingPaper;">
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'সংযুক্তিসমূহ' }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div [hidden]="hasPermission(actionTagUploadAttachment) === false"
+             style="display: flex; justify-content: flex-end; align-content: flex-start">
+          <button mat-icon-button style="color: white; background: #673ab7; margin-left: 2%;"
+                  matTooltip="সংযুক্তি আপলোড​ করুন"
+                  (click)="openDocumentUploadDialog('wp')">
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
+        <div class="box">
+          <div class="box-header">
+            <div>
+              <table mat-table #attachmentFilesSort="matSort" [dataSource]="dataSourceOfAttachmentFiles" matSort>
+
+                <!-- Serial Column -->
+                <ng-container matColumnDef="serialNo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ ' ক্রমিক নং ' }}</th>
+                  <td mat-cell *matCellDef="let row; let i = index"> {{i + 1 | localNumber}} </td>
+                </ng-container>
+
+                <!-- Attachment Column -->
+                <ng-container matColumnDef="attachmentFile">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ ' সংযুক্তি ' }}</th>
+                  <td mat-cell *matCellDef="let row"> {{ row?.fileTitle }} </td>
+                </ng-container>
+
+                <!-- Attachment Type Column -->
+                <ng-container matColumnDef="attachmentType">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ ' সংযুক্তির ধরন ' }}</th>
+                  <td mat-cell *matCellDef="let row"> {{ getAttachmentType(row) }} </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ ' অ্যাকশন ' }}</th>
+                  <td mat-cell *matCellDef="let row">
+                    <a class="btn btn-secondary" matTooltip="ফাইল দেখুন​"
+                       (click)="viewFile(row)" style="margin-right: 5px;">
+                      <i class="fa fa-file-pdf-o"></i>
+                    </a>
+                    <a class="btn btn-danger" matTooltip="ফাইল মুছে ফেলুন​"
+                       [hidden]="hasPermission(actionTagDeleteAttachment)=== false"
+                       (click)="deleteFile(row)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsOfAttachmentFiles"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsOfAttachmentFiles;">
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'মিটিং নোটসমূহ' }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div [hidden]="hasPermission(actionTagAddNote) === false">
+          <button mat-icon-button style="color: white; background: #673ab7; float:right;"
+                  matTooltip="নোট যোগ করুন"
+                  (click)="openNoteDialog()">
+            <mat-icon>add</mat-icon>
+          </button>
+          <br><br>
+        </div>
+        <br>
+        <div class="box">
+          <div class="box-header">
+            <div>
+              <table mat-table #notesSort="matSort" [dataSource]="dataSourceOfNote" matSort>
+
+                <!-- Serial Column -->
+                <ng-container matColumnDef="serialNo">
+                  <th mat-header-cell *matHeaderCellDef style="width: 10%; text-align: center"> {{ ' ক্রমিক নং ' }}</th>
+                  <td mat-cell *matCellDef="let row; let i = index"
+                      style="text-align: center"> {{i + 1 | localNumber}} </td>
+                </ng-container>
+
+                <!-- Agenda Column -->
+                <ng-container matColumnDef="agenda">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center">{{ ' আলোচ্য বিষয় ' }}</th>
+                  <td mat-cell *matCellDef="let row"> {{ getAgendaName(row.agendaOid) }} </td>
+                </ng-container>
+
+                <!-- Speaker Column -->
+                <ng-container matColumnDef="speaker">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center">{{ ' বক্তা ' }}</th>
+                  <td mat-cell *matCellDef="let row"> {{ getEmployeeName(row.speaker) }} </td>
+                </ng-container>
+
+                <!-- Note Column -->
+                <ng-container matColumnDef="note">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center"> {{ ' নোট ' }}</th>
+                  <td mat-cell *matCellDef="let row" class="multi_lines_text"> {{ row.note }} </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell
+                      [hidden]="hasPermission(actionTagDeleteNote)=== false &&
+                      hasPermission(actionTagEditNote)=== false"
+                      *matHeaderCellDef style="width: 20%; text-align: center"> {{ ' অ্যাকশন ' }}</th>
+                  <td mat-cell
+                      [hidden]="hasPermission(actionTagDeleteNote)=== false &&
+                      hasPermission(actionTagEditNote)=== false"
+                      *matCellDef="let row; let i = index" style="text-align: center">
+                    <a
+                      class="btn btn-danger" matTooltip="নোট মুছে ফেলুন​"
+                      [hidden]="hasPermission(actionTagDeleteNote)=== false"
+                      (click)="openConfirmationDialog('note', row)" style="margin-right: 5px;">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                    <a
+                      class="btn btn-secondary" matTooltip="নোট সম্পাদনা করুন​"
+                      [hidden]="hasPermission(actionTagEditNote)=== false"
+                      (click)="openNoteDialog(row, i)">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsOfNotes"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsOfNotes;">
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'কার্যবিবরণী' }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div style="display: flex; justify-content: flex-end; align-content: flex-start">
+          <button mat-icon-button style="color: white; background: #673ab7; margin-left: 2%;"
+                  matTooltip="কার্যবিবরণী আপলোড​ করুন"
+                  [hidden]="hasPermission(actionTagUploadResolution) === false || resolutions.length > 0"
+                  (click)="openDocumentUploadDialog('resolution')">
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+          <button mat-icon-button style="color: white; background: #673ab7; margin-left: 2%;"
+                  matTooltip="আলোচনা ও সিদ্ধান্ত​ যোগ​ করুন"
+                  [hidden]="hasPermission(actionTagAddAgendaFollowup) === false"
+                  (click)="openFollowupDialog()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <br>
+        <div class="box" [hidden]="resolutions.length === 0">
+          <div class="box-header">
+            <div>
+              <table mat-table #resolutionSort="matSort" [dataSource]="dataSourceOfResolution" matSort>
+                <!-- Serial Column -->
+                <ng-container matColumnDef="serialNo">
+                  <th mat-header-cell *matHeaderCellDef style="width: 10%; text-align: center"> {{ ' ক্রমিক নং ' }}</th>
+                  <td mat-cell *matCellDef="let row; let i = index"
+                      style="text-align: center"> {{i + 1 | localNumber}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="resolution">
+                  <th mat-header-cell *matHeaderCellDef
+                      style="text-align: center; width: 30%;">{{ ' কার্যবিবরণী ' }}</th>
+                  <td mat-cell *matCellDef="let row" style="text-align: center"> {{ row?.fileTitle }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="comment">
+                  <th mat-header-cell *matHeaderCellDef
+                      style="text-align: center; width: 40%;">{{ ' অনুমোদনকারীর মন্তব্য​ ' }}</th>
+                  <td mat-cell *matCellDef="let row"
+                      style="text-align: center"> {{currentResolutionComment}} </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center"> {{ ' অ্যাকশন ' }}</th>
+                  <td mat-cell *matCellDef="let row" style="text-align: center">
+                    <a class="btn btn-secondary" matTooltip="ফাইল দেখুন​"
+                       (click)="viewFile(row)" style="margin-right: 5px;">
+                      <i class="fa fa-file-pdf-o"></i>
+                    </a>
+                    <a class="btn btn-danger" matTooltip="ফাইল মুছে ফেলুন​"
+                       [hidden]="hasPermission(actionTagDeleteResolution)=== false"
+                       (click)="deleteFile(row)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsOfResolution"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsOfResolution;">
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div style="font-family: Kalpurush; padding: 15px 5px 5px;"
+             [hidden]="!resolutionForwardingInfos || !resolutionForwardingInfos.length">
+          <h6>
+            {{ 'অনুমোদনকারীর মন্তব্য​সমূহ​' }}
+          </h6>
+          <ul class="list-group" style="padding-left: 40px;">
+            <li *ngFor="let info of resolutionForwardingInfos">
+              {{info.comment}}, {{info.updatedOn | date: 'fullDate' | localNumber}}
+            </li>
+          </ul>
+        </div>
+        <br>
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">{{'আলোচনা ও সিদ্ধান্ত​'}}</h3>
+            <div>
+              <table mat-table #followUpsSort="matSort" matSortActive="serialNo" matSortDirection="asc"
+                     [dataSource]="dataSourceOfFollowups" cdkDropList
+                     [cdkDropListData]="dataSourceOfFollowups" (cdkDropListDropped)="dropFollowupTable($event)"
+                     matSort>
+
+                <ng-container matColumnDef="dragDrop">
+                  <th mat-header-cell *matHeaderCellDef style="width: 10%; text-align: center"
+                      class="width-ten-percent"> {{ '  ' }} </th>
+                  <td mat-cell *matCellDef="let row" align="center" class="width-ten-percent">
+                    <img src="https://img.icons8.com/material/24/000000/drag-reorder--v1.png">
+                  </td>
+                </ng-container>
+
+                <!-- Serial Column -->
+                <ng-container matColumnDef="serialNo">
+                  <th mat-header-cell *matHeaderCellDef
+                      style="width: 10%; text-align: center"> {{ ' ক্রমিক নং ' }} </th>
+                  <td mat-cell *matCellDef="let row" style="text-align: center"> {{row.serialNo | localNumber}} </td>
+                </ng-container>
+
+                <!-- Agenda Column -->
+                <ng-container matColumnDef="agenda">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center">{{ ' আলোচ্য বিষয় ' }}</th>
+                  <td mat-cell *matCellDef="let row"> {{ getAgendaName(row.agendaOid) }} </td>
+                </ng-container>
+
+                <!-- Discussion Column -->
+                <ng-container matColumnDef="discussion">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center">{{' আলোচনা '}}</th>
+                  <td mat-cell *matCellDef="let row" class="multi_lines_text"> {{ row.discussion }} </td>
+                </ng-container>
+
+                <!-- Decision Column -->
+                <ng-container matColumnDef="decision">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center">{{' সিদ্ধান্ত​ '}}</th>
+                  <td mat-cell *matCellDef="let row" class="multi_lines_text"> {{ row.decision }} </td>
+                </ng-container>
+
+                <!-- Responsible Entity -->
+                <ng-container matColumnDef="responsibleEntity">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center">{{' বাস্তবায়নে '}}</th>
+                  <td mat-cell *matCellDef="let row" class="multi_lines_text"> {{ row.responsibleEntity }} </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell
+                      [hidden]="hasPermission(actionTagDeleteAgendaFollowup)=== false &&
+                      hasPermission(actionTagEditAgendaFollowUp)=== false"
+                      *matHeaderCellDef style="text-align: center; width: 15%;"> {{ ' অ্যাকশন ' }} </th>
+                  <td mat-cell
+                      [hidden]="hasPermission(actionTagDeleteAgendaFollowup)=== false &&
+                      hasPermission(actionTagEditAgendaFollowUp)=== false"
+                      *matCellDef="let row; let i = index" style="text-align: center">
+                    <a
+                      class="btn btn-danger" matTooltip="মুছে ফেলুন​"
+                      [hidden]="hasPermission(actionTagDeleteAgendaFollowup)=== false"
+                      (click)="openConfirmationDialog('followup', row)" style="margin-right: 5px;">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                    <a
+                      class="btn btn-secondary" matTooltip="সম্পাদনা করুন​"
+                      [hidden]="hasPermission(actionTagEditAgendaFollowUp)=== false"
+                      (click)="openFollowupDialog(row, i)">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                  </td>
+
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsOfFollowups"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsOfFollowups;"
+                    cdkDrag [cdkDragDisabled]="!hasPermission(actionTagEditAgendaFollowUp)" [cdkDragData]="row"
+                    cdkDragLockAxis="y">
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>

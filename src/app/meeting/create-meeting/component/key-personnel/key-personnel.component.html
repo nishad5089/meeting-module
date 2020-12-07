@@ -1,0 +1,70 @@
+<mat-card style="min-height: 55vh;">
+  <mat-card-content>
+    <div class="example-form" [formGroup]="key_personnel_form">
+
+      <mat-form-field>
+        <mat-label>{{' সদস্য সচিব​ '}}</mat-label>
+        <input formControlName="signatory" type="text" required
+               placeholder="{{'সদস্য সচিব​ বাছাই করুন'}}" matInput [matAutocomplete]="auto3">
+        <mat-autocomplete [displayWith]="displayFn"
+                          autoActiveFirstOption #auto3="matAutocomplete">
+          <mat-option *ngFor="let opt of fileredSignatory$ | async; let index = index" [value]="opt">
+            {{ displayFn(opt) }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="errorHandling('signatory','required')">
+          অনুগ্রহপূর্বক মিটিং এর <strong>সদস্য সচিব​</strong> নির্বাচন করুন
+        </mat-error>
+      </mat-form-field>
+
+      <div class="row">
+        <div class="col-md-9">
+          <mat-form-field>
+            <mat-label>{{' সভাপতি '}}</mat-label>
+            <input formControlName="chairperson" type="text"
+                   placeholder="{{'সভাপতি বাছাই করুন'}}" matInput [matAutocomplete]="auto1">
+            <mat-autocomplete [displayWith]="displayFn"
+                              autoActiveFirstOption #auto1="matAutocomplete">
+              <mat-option *ngFor="let opt of filteredChairperson$ | async; let index = index" [value]="opt">
+                {{ displayFn(opt) }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3" style="padding-top: 13px; padding-right: unset;">
+          <mat-radio-group style="font-size: smaller; font-weight: bold;" aria-label="Select an option"
+                           formControlName="chairpersonType">
+            <mat-radio-button style="padding-right: 20px;" *ngFor="let option of options" [value]="option.value">
+              {{option.label}}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-9">
+          <mat-form-field>
+            <mat-label>{{' প্রধান অতিথি '}}</mat-label>
+            <input formControlName="chiefGuest" type="text"
+                   placeholder="{{'প্রধান অতিথি বাছাই করুন'}}" matInput [matAutocomplete]="auto4">
+            <mat-autocomplete [displayWith]="displayFn"
+                              autoActiveFirstOption #auto4="matAutocomplete">
+              <mat-option *ngFor="let opt of filteredChiefGuest$ | async; let index = index" [value]="opt">
+                {{ displayFn(opt) }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3" style="padding-top: 13px; padding-right: unset;">
+          <mat-radio-group style="font-size: smaller; font-weight: bold;" aria-label="Select an option"
+                           formControlName="chiefGuestType">
+            <mat-radio-button style="padding-right: 20px;" *ngFor="let option of options" [value]="option.value">
+              {{option.label}}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+  <input
+    type="hidden"
+    readonly
+    name="oid"
+    id="oid"
+    [(ngModel)]="data.dto.oid">
+  <input
+    type="hidden"
+    readonly
+    name="fieldType"
+    id="fieldType"
+    [(ngModel)]="data.dto.fieldType">
+  <mat-form-field>
+    <input matInput placeholder="Enter Bangla {{data['type']}}" required maxlength="128"
+           [(ngModel)]="data.dto.fieldNameBn">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Enter English {{data['type']}}" required maxlength="128"
+           [(ngModel)]="data.dto.fieldNameEn">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="example-button-row" align="end">
+  <button mat-raised-button color="warn" (click)="cancel()">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data.dto">{{ ' সংরক্ষণ করুন ' }}</button>
+</div>

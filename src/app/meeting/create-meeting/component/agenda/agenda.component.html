@@ -1,0 +1,68 @@
+<mat-card style="min-height: 55vh;">
+  <mat-card-content>
+    <div>
+      <button mat-icon-button style="color: white; background: #673ab7; float:right; margin:27px"
+              matTooltip="আলোচ্য বিষয় যোগ করুন"
+              (click)="openDialog()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <br><br>
+    <h3 class="box-title">{{' &nbsp; '}}</h3>
+    <div>
+      <div class="mem-list-table-container">
+        <table class="mem-table-full-width" mat-table [dataSource]="dataSource" cdkDropList
+               [cdkDropListData]="dataSource" (cdkDropListDropped)="dropAgendaTable($event)" matSort>
+
+          <ng-container matColumnDef="dragDrop">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 10%;"> {{ '  ' }} </th>
+            <td mat-cell *matCellDef="let row">
+              <img src="https://img.icons8.com/material/24/000000/drag-reorder--v1.png">
+            </td>
+          </ng-container>
+
+          <!-- Serial Column -->
+          <ng-container matColumnDef="serialNo">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 10%;">{{' ক্রমিক নং '}}</th>
+            <td mat-cell *matCellDef="let row"> {{row.serialNo | localNumber}} </td>
+          </ng-container>
+
+          <!-- File Name Column -->
+          <ng-container matColumnDef="agenda">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 60%;">{{' আলোচ্য বিষয় '}}</th>
+            <td mat-cell *matCellDef="let row" class="multi_lines_text" style="text-align: left;"> {{row.agenda}} </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;">{{ ' অ্যাকশন ' }}</th>
+            <td mat-cell *matCellDef="let row">
+              <a
+                class="btn btn-danger" matTooltip="{{'মুছে ফেলুন​'}}​"
+                (click)="deleteAgenda(row.serialNo)" style="margin-right: 5px;">
+                <i class="fa fa-trash"></i>
+              </a>
+              <a
+                class="btn btn-secondary" matTooltip="{{'সম্পাদনা করুন​'}}"
+                (click)="openDialog(meetingAgenda[row.serialNo - 1])">
+                <i class="fa fa-edit"></i>
+              </a>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="disclaimer">
+            <td mat-footer-cell *matFooterCellDef colspan="4" align="center">
+              {{' দ​য়া করে অন্তত একটি আলোচ্য বিষ​য় যোগ করুন​ '}}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr [hidden]="dataSource?.data.length === 0" mat-row *matRowDef="let row; columns: displayedColumns;"
+              cdkDrag [cdkDragData]="row" cdkDragLockAxis="y"></tr>
+          <tr [hidden]="dataSource?.data.length !== 0" mat-footer-row *matFooterRowDef="['disclaimer']"
+              class="example-second-footer-row"></tr>
+        </table>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

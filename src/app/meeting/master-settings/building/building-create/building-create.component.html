@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>{{'ভবনের নাম​'}}</mat-label>
+    <input
+      matInput
+      name="building_name"
+      id="buildingName"
+      [(ngModel)]="data.dto.buildingName"
+      required
+      placeholder="ভবনের নাম​ লিখুন​">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'ঠিকানা'}}</mat-label>
+    <textarea
+      matInput
+      name="address"
+      id="address"
+      required
+      [(ngModel)]="data.dto.address"
+      placeholder="ঠিকানা লিখুন​">
+    </textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="accent" [mat-dialog-close]="">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data.dto">{{' সংরক্ষণ করুন​ '}}</button>
+</div>

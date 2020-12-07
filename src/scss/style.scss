@@ -1,0 +1,645 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ng-primary: mat-palette($mat-indigo);
+$ng-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ng-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$ng-theme: mat-light-theme($ng-primary, $ng-accent, $ng-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ng-theme);
+
+// If you want to override variables do it here
+@import "variables";
+
+// Import styles with default layout.
+// If you are going to use dark layout please comment next line
+@import "~@coreui/coreui-pro/scss/coreui";
+
+// Import styles with dark layout
+// If you want to use dark layout uncomment next line
+//@import "~@coreui/coreui-pro/scss/themes/dark/coreui-dark";
+
+// If you want to add something do it here
+@import "custom";
+
+// Spinkit
+$spinkit-spinner-color: $body-color;
+@import '~spinkit/scss/spinkit.scss';
+@import "../assets/fonts/kalpurush.css";
+@import "~angular-calendar/css/angular-calendar.css";
+
+
+html, body {
+  font-family: 'Kalpurush' !important;
+  margin: 0;
+  background:lightgray;
+}
+
+/*@font-face {*/
+/*  font-family: NikoshBAN;*/
+/*  src: url("assets/NikoshBAN.ttf") format('truetype');*/
+/*}*/
+
+.basic-container {
+  padding: 30px;
+}
+
+mwl-calendar-month-cell {
+  font-family: 'Kalpurush' !important;
+}
+
+mwl-calendar-month-view-header {
+  font-family: 'Kalpurush' !important;
+}
+
+mwl-calendar-day-view-event {
+  font-family: 'Kalpurush' !important;
+}
+
+mwl-calendar-event-title {
+  font-family: 'Kalpurush' !important;
+}
+
+th, td {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  font-family: 'Kalpurush' !important;
+  padding-right: 3% !important;
+}
+
+mat-label {
+  font-size: smaller !important;
+  font-family: 'Kalpurush' !important;
+}
+
+.mat-form-field {
+  font-family: 'Kalpurush' !important;
+  font-size: small;
+  line-height: 1.75;
+}
+
+mat-select {
+  font-family: 'Kalpurush' !important;
+}
+
+mat-option {
+  font-family: 'Kalpurush' !important;
+}
+
+.version-info {
+  font-size: 8pt;
+  float: right;
+}
+
+.mat-tooltip {
+  background-color: #4CAF50;
+  font-size: 12px !important;
+  font-family: 'Kalpurush' !important;
+}
+
+mat-expansion-panel-header {
+  font-family: 'Kalpurush' !important;
+}
+
+.mat-simple-snackbar {
+  font-family: 'Kalpurush' !important;
+}
+
+table.mem-table-full-width {
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+mat-panel-description {
+  font-family: 'Kalpurush' !important;
+}
+
+/*.mat-input-element {
+  height: 25px;
+}
+
+.mat-select {
+  height: 25px;
+}*/
+
+.mem-button-add {
+  background: chartreuse;
+}
+
+.mem-list-table-container {
+  height: auto;
+  width: 100% !important;
+}
+
+.mat-header-cell {
+  font-size: small;
+  font-weight: bold;
+}
+
+.mat-tab-label {
+  font-size: small;
+  font-weight: bold;
+  font-family: 'Kalpurush' !important;
+}
+
+h1 {
+  font-family: 'Kalpurush' !important;
+}
+
+h2 {
+  font-family: 'Kalpurush' !important;
+}
+
+h3 {
+  font-family: 'Kalpurush' !important;
+}
+
+h4 {
+  font-family: 'Kalpurush' !important;
+}
+
+h5 {
+  font-family: 'Kalpurush' !important;
+}
+
+.mat-paginator-sticky {
+  bottom: 0;
+  position: sticky;
+  z-index: 10;
+}
+
+mat-paginator {
+  font-family: 'Kalpurush' !important;
+}
+
+button {
+  outline: unset !important;
+  font-family: 'Kalpurush' !important;
+}
+
+.mat-button-toggle {
+  background-color: #1dd0e9 !important;
+  font-family: 'Kalpurush' !important;
+}
+
+.mat-button-toggle-checked {
+  background-color: #efefef !important;
+  font-family: 'Kalpurush' !important;
+}
+
+.btn-delete {
+  color: red;
+}
+
+.btn-edit {
+  color: darkslateblue;
+}
+.btn-fab-md {
+  color: white;
+  background: #777777;
+}
+.mem-search-panel {
+  margin-bottom: 16px;
+}
+.speed-dial-container {
+  display: inline-block;
+  //position: absolute !important;
+  right: 20px !important;
+}
+
+.speed-dial-container.top {
+  top: 110px !important;
+}
+
+.speed-dial-container.bottom {
+  bottom: 15px !important;
+}
+
+.mat-cell.text-right {
+  text-align: right;
+}
+
+.cdk-drag-preview {
+  box-sizing: content-box;
+  align-items: self-start;
+  justify-content: stretch;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.full-height {
+  height: 400px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.loader  {
+  animation: rotate 1s infinite;
+  height: 50px;
+  width: 50px;
+}
+
+.loader:before,
+.loader:after {
+  border-radius: 50%;
+  content: '';
+  display: block;
+  height: 20px;
+  width: 20px;
+}
+.loader:before {
+  animation: ball1 1s infinite;
+  background-color: #cb2025;
+  box-shadow: 30px 0 0 #f8b334;
+  margin-bottom: 10px;
+}
+.loader:after {
+  animation: ball2 1s infinite;
+  background-color: #00a096;
+  box-shadow: 30px 0 0 #97bf0d;
+}
+
+@keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg) scale(0.8);
+    -moz-transform: rotate(0deg) scale(0.8);
+  }
+  50% {
+    -webkit-transform: rotate(360deg) scale(1.2);
+    -moz-transform: rotate(360deg) scale(1.2);
+  }
+  100% {
+    -webkit-transform: rotate(720deg) scale(0.8);
+    -moz-transform: rotate(720deg) scale(0.8);
+  }
+}
+
+@keyframes ball1 {
+  0% {
+    box-shadow: 30px 0 0 #f8b334;
+  }
+  50% {
+    box-shadow: 0 0 0 #f8b334;
+    margin-bottom: 0;
+    -webkit-transform: translate(15px,15px);
+    -moz-transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #f8b334;
+    margin-bottom: 10px;
+  }
+}
+
+@keyframes ball2 {
+  0% {
+    box-shadow: 30px 0 0 #97bf0d;
+  }
+  50% {
+    box-shadow: 0 0 0 #97bf0d;
+    margin-top: -20px;
+    -webkit-transform: translate(15px,15px);
+    -moz-transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #97bf0d;
+    margin-top: 0;
+  }
+}
+
+.example-loading-shade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.example-rate-limit-reached {
+  color: #980000;
+  max-width: 360px;
+  text-align: center;
+}
+
+.example-second-footer-row td {
+  color: #900000;
+  font-weight: bold;
+}
+
+mwl-calendar-month-cell {
+  font-family: 'Kalpurush' !important;
+}
+
+mwl-calendar-month-view-header {
+  font-family: 'Kalpurush' !important;
+}
+
+mwl-calendar-day-view-event {
+  font-family: 'Kalpurush' !important;
+}
+
+mwl-calendar-event-title {
+  font-family: 'Kalpurush' !important;
+}
+
+mat-card {
+  font-family: 'Kalpurush' !important;
+}
+
+table {
+  table-layout: fixed;
+}
+
+mat-radio-button {
+  font-family: 'Kalpurush' !important;
+  padding-right: 1%;
+}
+
+
+.example-full-width {
+  width: 100%;
+  margin-left: 2%;
+}
+
+.example-full-width-type {
+  width: 43%;
+  margin-left: 2%;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  max-width: 98%;
+  width: 100%;
+}
+
+.example-full-width-modal {
+  width: 90%;
+  margin-left: 2%;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-row:hover {
+  background-color: #cae9de;
+  cursor: pointer;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+/*tr.example-element-row:not(.example-expanded-row):hover {
+  background: #777;
+}*/
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+
+.make-blue {
+  background-color: #F7E6F6;
+}
+
+.meeting-status-badge {
+  color: black;
+  padding: 8px 10px 5px 10px;
+  min-width: 160px; font-size: 12px;
+  font-weight: 400;
+}
+
+.mat-sort-header-container {
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+$widths: (
+  ten-percent: 10%,
+  fifteen-percent: 15%,
+  twenty-persent: 20%,
+  twenty-five-percent: 25%,
+  thirty-percent: 30%,
+  sixty-percent: 60%,
+  seventy-percent: 70%
+);
+
+@each $k, $v in $widths {
+  .width-#{$k} {
+    width: $v;
+  }
+}
+
+.align-center {
+  text-align: center!important;
+}
+
+li {
+  font-family: 'Kalpurush' !important;
+}
+
+.nav-tab-selected {
+  background-color: #2C387D ;
+}
+.nav-tab-hover {
+  background-color: #42A5F5;
+}
+// bg color starts here
+// header and footer color
+.nav-tab-dark {
+  background-color: #1D2345;
+}
+
+.nav-tab-base {
+  background-color: #242C56;
+}
+// sidebar color when active
+.sidebar .nav-link.active {
+  background: #2C387D ;
+}
+// sidebar/menu bg-color on hover
+.sidebar .nav-link:hover {
+  background: #42A5F5 ;
+}
+
+// bg-color when sidebar minimized
+.sidebar-minimized .sidebar .nav-link{
+  background-color: #1D2345;
+}
+// bg-color when minimized sidebar is active
+.sidebar-minimized .sidebar .nav-link.active{
+  background: #2C387D ;
+}
+
+.overlay {
+  position:fixed;
+  display: block;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  opacity: 0.9;
+  background-color: whitesmoke;
+  z-index:99999;
+}
+.spinner {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  //color: dodgerblue;
+  stroke: orange;
+}
+
+.error-background {
+  background: rgb(0,142,212);
+  background: radial-gradient(circle, rgba(0,142,212,1) 0%, rgba(0,142,212,1) 8%, rgba(0,68,133,1) 43%, rgba(17,34,104,1) 71.5%, rgba(6,12,81,1) 85.4%, rgba(0,0,68,1) 100%);
+}
+
+.multi_lines_text {
+  white-space: pre-line;
+}
+
+::ng-deep .mat-horizontal-stepper-header {
+  display: none !important;
+}
+
+.mat-horizontal-stepper-header {
+  font-family: 'Kalpurush' !important;
+  pointer-events: none !important;
+}
+
+.mat-horizontal-stepper-header .mat-step-label {
+  font-size: 12px;
+  max-width: 80px;
+  white-space: normal;
+}
+
+.mat-step-header .mat-step-icon {
+
+}
+
+.mat-step-header .mat-step-icon-state-done {
+  background-color: #4CAF50 !important;
+}
+
+.mat-step-header .mat-step-icon-selected {
+  background-color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
+  color: rgba(0, 0, 0, 1.0);
+}
+
+.error-state {
+  background-color: red !important;
+}
+
+.done-state {
+  background-color: #4CAF50 !important;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+//@media (min-width: 992px) {
+//  .header-fixed .app-header {
+//    position: fixed;
+//    z-index: 1000;
+//    width: 100%;
+//  }
+//}
+//
+//@media (min-width: 992px) {
+//  .sidebar-fixed .sidebar {
+//    position: fixed;
+//    z-index: 1000;
+//    width: 200px;
+//    height: 100vh;
+//  }
+//}
+//
+//.footer-fixed .app-footer {
+//  position: fixed;
+//  right: 0;
+//  bottom: 0;
+//  left: 0;
+//  z-index: 1000;
+//  height: 50px;
+//}

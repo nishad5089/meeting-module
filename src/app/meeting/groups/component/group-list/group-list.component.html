@@ -1,0 +1,91 @@
+<div class="overlay"
+     *ngIf="isLoadingResults">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<mat-card>
+  <!-- ToDo add component and use as view child -->
+  <table class="table table-filter">
+    <tr>
+      <td width="85%" style="border: none">
+        <mat-form-field style="display: inline; width: 30%">
+          <mat-label>অনুসন্ধান</mat-label>
+          <input matInput placeholder="অনুসন্ধানের শব্দাংশ লিখুন" (keyup)="applyFilter($event.target.value)"/>
+        </mat-form-field>
+      </td>
+      <td class="float-right" style="border: none">
+        <a class="btn btn-secondary" matTooltip="{{'অনুসন্ধানের ফিল্টার ঠিক করুন​'}}"
+           (click)="showFilters=!showFilters" style="margin-right: 5px;">
+          <i class="fa fa-filter"></i>
+        </a>
+        <a class="btn btn-primary" (click)="add()"
+           [hidden]="!canAdd(actionTagAddGroup)"
+           matTooltip="{{addButtonTooltips}}">
+          <i class="fa fa-plus"></i>
+        </a>
+      </td>
+    </tr>
+  </table>
+  <mat-card-content [hidden]="!showFilters">
+    <div class="row">
+      <mat-form-field class="col-md-6">
+        <mat-label>{{'গ্রুপের নাম'}}</mat-label>
+        <input matInput [(ngModel)]="dto.groupName" placeholder="{{'গ্রুপের নাম দিয়ে অনুসন্ধান'}}">
+      </mat-form-field>
+      <mat-form-field class="col-md-6">
+        <mat-label>{{'বর্ণনা'}}</mat-label>
+        <input matInput [(ngModel)]="dto.description" placeholder="{{'গ্রুপের বর্ণনা দিয়ে অনুসন্ধান'}}">
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions [hidden]="!showFilters" align="end">
+    <a class="btn btn-secondary btn-filter-reset" (click)="reset()" matTooltip="{{'অনুসন্ধানের ফিল্ডগুলো রিসেট করুন​'}}">
+      <i class="fa fa-refresh"></i>
+    </a>
+    <a class="btn btn-primary" (click)="search(dto)" matTooltip="{{'অনুসন্ধান করুন​'}}">
+      <i class="fa fa-search"></i>
+    </a>
+  </mat-card-actions>
+</mat-card>
+<br/>
+<div>
+  <div class="mem-list-table-container">
+    <table mat-table [dataSource]="dataSource" matSort class="mem-table-full-width">
+      <ng-container matColumnDef="sl">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">{{ ' ক্রমিক নং ' }}</th>
+        <td mat-cell style="text-align: center;" *matCellDef="let row; let i = index"> {{i + 1 | localNumber}}</td>
+      </ng-container>
+      <ng-container matColumnDef="groupName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ ' গ্রুপের নাম ' }}</th>
+        <td mat-cell *matCellDef="let row"> {{ row?.groupName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ ' বর্ণনা ' }}</th>
+        <td mat-cell *matCellDef="let row"> {{ row?.description }}</td>
+      </ng-container>
+      <!-- ToDo can we use viewchild here as well -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell [hidden]="!canDelete(actionTagDeleteGroup) && !canEdit(actionTagEditGroup)" *matHeaderCellDef style="text-align: center"> {{ ' অ্যাকশন ' }}</th>
+        <td mat-cell [hidden]="!canDelete(actionTagDeleteGroup) && !canEdit(actionTagEditGroup)" *matCellDef="let element" style="text-align: center">
+          <a
+            class="btn btn-danger" matTooltip="গ্রুপ মুছে ফেলুন​"
+            [hidden]="!canDelete(actionTagDeleteGroup)"
+            (click)="delete(element); $event.stopPropagation()" style="margin-right: 5px;">
+            <i class="fa fa-trash"></i>
+          </a>
+          <a
+            class="btn btn-secondary" matTooltip="গ্রুপ সম্পাদনা করুন​"
+            [hidden]="!canEdit(actionTagEditGroup)"
+            (click)="update(element); $event.stopPropagation()">
+            <i class="fa fa-edit"></i>
+          </a>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayColumns;"
+          (click)="goToDetails(row)"
+      ></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+  </div>
+</div>

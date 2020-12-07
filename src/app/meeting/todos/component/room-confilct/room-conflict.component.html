@@ -1,0 +1,69 @@
+<mat-card style="min-height: 55vh;">
+  <div class="overlay"
+       *ngIf="isLoadingResults">
+    <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+  </div>
+  <mat-card-header><h4>{{'রুম কনফ্লিক্ট'}}</h4></mat-card-header>
+  <mat-card-content>
+    <div>
+      <div class="mem-list-table-container">
+        <table class="mem-table-full-width" mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="serialNo">
+            <th mat-header-cell *matHeaderCellDef>{{' ক্রমিক নং '}}</th>
+            <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+          </ng-container>
+<!--          &lt;!&ndash; Meeting Title &ndash;&gt;-->
+          <ng-container matColumnDef="meetingTitle">
+            <th mat-header-cell *matHeaderCellDef>{{' মিটিংয়ের শিরোনাম​ '}}</th>
+            <td mat-cell *matCellDef="let element">{{element.meetingTitle}}</td>
+          </ng-container>
+<!--          &lt;!&ndash; Date-Time &ndash;&gt;-->
+<!--          <ng-container matColumnDef="dateTime">-->
+<!--            <th mat-header-cell *matHeaderCellDef>{{' তারিখ​-সময়​ '}}</th>-->
+<!--            <td mat-cell *matCellDef="let element">{{element.meetingDate | date}}-->
+<!--              <br> {{element.meetingStartTime | date: 'shortTime'}}-{{element.meetingEndTime | date: 'shortTime'}}-->
+<!--            </td>-->
+<!--          </ng-container>-->
+<!--          &lt;!&ndash; Nominated &ndash;&gt;-->
+<!--          <ng-container matColumnDef="nominationStatus">-->
+<!--            <th mat-header-cell *matHeaderCellDef>{{' মনোনিত ​'}}</th>-->
+<!--            <td mat-cell *matCellDef="let element">-->
+<!--              <mat-icon>{{isNominated(element).value}}</mat-icon>-->
+<!--            </td>-->
+<!--          </ng-container>-->
+<!--          &lt;!&ndash; Response &ndash;&gt;-->
+<!--          <ng-container matColumnDef="response">-->
+<!--            <th mat-header-cell *matHeaderCellDef>{{' সাড়া '}}</th>-->
+<!--            <td mat-cell *matCellDef="let element">-->
+<!--              <mat-icon-->
+<!--                matTooltip="{{getResponseStatus(element).tip}}">{{getResponseStatus(element).value}}</mat-icon>-->
+<!--            </td>-->
+<!--          </ng-container>-->
+<!--          &lt;!&ndash; Actions &ndash;&gt;-->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{' অ্যাকশন '}}</th>
+            <td mat-cell *matCellDef="let element">
+              <button class="btn btn-primary" matTooltip="বিস্তারিত"
+                      (click)="getDetails('going', element)"
+                      [disabled]="element.attendeeResponseStatus !== 'pending'">
+                {{'বিস্তারিত'}}
+              </button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="disclaimer">
+            <td mat-footer-cell *matFooterCellDef colspan="6">
+              {{'কোনো অনুরোধ​ পাওয়া যায়নি'}}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+          <tr [hidden]="dataSource?.data.length === 0" mat-row *matRowDef="let row; columns: displayColumns"></tr>
+          <tr [hidden]="dataSource?.data.length !== 0" mat-footer-row *matFooterRowDef="['disclaimer']"
+              class="example-second-footer-row"></tr>
+        </table>
+      </div>
+      <mat-paginator [pageSizeOptions]="[25, 50, 100, 200]" showFirstLastButtons></mat-paginator>
+
+    </div>
+  </mat-card-content>
+</mat-card>

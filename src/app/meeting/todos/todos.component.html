@@ -1,0 +1,41 @@
+<mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex">
+  <mat-tab>
+    <ng-template matTabLabel>
+      <span [matBadgeHidden]="!totalPendingWorkingPapers || totalPendingWorkingPapers === 0"
+            [matBadge]="totalPendingWorkingPapers | number | localNumber"
+            [matBadgeColor]="totalPendingWorkingPapers > 0 ? 'warn' : 'accent'"
+            matBadgeOverlap="false">{{'কার্যপত্র​'}}</span>
+    </ng-template>
+    <app-working-paper (sendPendingWorkingPapers)="receivePendingWorkingPapers($event)"></app-working-paper>
+  </mat-tab>
+  <mat-tab>
+    <ng-template matTabLabel>
+      <span [matBadgeHidden]="!totalPendingResponses || totalPendingResponses === 0"
+            [matBadge]="totalPendingResponses | number | localNumber"
+            [matBadgeColor]="totalPendingResponses > 0 ? 'warn' : 'accent'"
+            matBadgeOverlap="false">{{'সাড়া'}}</span>
+    </ng-template>
+    <app-response (sendPendingResponses)="receivePendingResponses($event)"></app-response>
+  </mat-tab>
+  <mat-tab>
+    <ng-template matTabLabel>
+      <span [matBadgeHidden]="!totalPendingNoticeApprovals || totalPendingNoticeApprovals === 0"
+            [matBadge]="totalPendingNoticeApprovals | number | localNumber"
+            [matBadgeColor]="totalPendingNoticeApprovals > 0 ? 'warn' : 'accent'"
+            matBadgeOverlap="false">{{'নোটিশ'}}</span>
+    </ng-template>
+    <app-notice-approval (sendPendingNoticeApproval)="receivePendingNoticeApprovals($event)"></app-notice-approval>
+  </mat-tab>
+  <mat-tab>
+    <ng-template matTabLabel>
+      <span [matBadgeHidden]="!totalPendingResolutionApprovals || totalPendingResolutionApprovals === 0"
+            [matBadge]="totalPendingResolutionApprovals | number | localNumber"
+            [matBadgeColor]="totalPendingResolutionApprovals > 0 ? 'warn' : 'accent'"
+            matBadgeOverlap="false">{{'কার্যবিবরনী'}}</span>
+    </ng-template>
+    <app-resolution-approval (sendPendingResolutionApproval)="receivePendingResolutionApprovals($event)"></app-resolution-approval>
+  </mat-tab>
+<!--  <mat-tab label="{{'রুম কনফ্লিক্ট'}}">-->
+<!--    <app-room-conflict></app-room-conflict>-->
+<!--  </mat-tab>-->
+</mat-tab-group>

@@ -1,0 +1,44 @@
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>{{'অ্যাকশন (ইং)​​​'}}</mat-label>
+    <input
+      matInput
+      name="action_en"
+      id = "actionEn"
+      [(ngModel)]="data.dto.actionEn"
+      placeholder="অ্যাকশন (ইং)​ লিখুন​">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'অ্যাকশন (বাংলা)​​​'}}</mat-label>
+    <input
+      matInput
+      name="action_bn"
+      id = "actionBn"
+      [(ngModel)]="data.dto.actionBn"
+      placeholder="অ্যাকশন (বাংলা)​​​ লিখুন​">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'অ্যাকশন ট্যাগ'}}</mat-label>
+    <input
+      matInput
+      name="action_tag"
+      id = "actionTag"
+      [(ngModel)]="data.dto.actionTag"
+      placeholder="অ্যাকশন ট্যাগ লিখুন​">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'বিবরণ'}}</mat-label>
+    <textarea
+      matInput
+      name="description"
+      id = "description"
+      [(ngModel)]="data.dto.description"
+      placeholder="বিবরণ লিখুন​">
+    </textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" [mat-dialog-close]="data.dto">{{' সংরক্ষণ করুন​'}}</button>
+
+</div>

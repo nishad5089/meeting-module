@@ -1,0 +1,133 @@
+<div class="overlay"
+     *ngIf="loading">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<h1 mat-dialog-title>{{'মিটিংয়ের উপস্থিতি'}}</h1>
+<div class="row">
+  <div class="col-md-4">
+    <mat-form-field>
+      <mat-label>{{' ট্যাক্স ফি (%)'}}</mat-label>
+      <input matInput [(ngModel)]="taxRate">
+    </mat-form-field>
+  </div>
+  <div class="col-md-4">
+    <mat-form-field>
+      <mat-label>{{' রাজস্ব​ টিকিট ফি '}}</mat-label>
+      <input matInput [(ngModel)]="revenueStampFee">
+    </mat-form-field>
+  </div>
+  <div class="col-md-4">
+    <mat-form-field>
+      <mat-label>{{' ডিফল্ট সম্মানী '}}</mat-label>
+      <input matInput type="number" [(ngModel)]="defaultValue" (blur)="setHonorarium()">
+    </mat-form-field>
+  </div>
+</div>
+<br/>
+<app-alert></app-alert>
+<br/>
+<div style="height: 70%; overflow: auto;">
+  <table mat-table [dataSource]="dataSource">
+
+    <!-- Serial Column -->
+    <ng-container matColumnDef="serialNo">
+      <th mat-header-cell *matHeaderCellDef style="width: 10%; text-align: left;">{{'ক্রমিক নং'}}</th>
+      <td mat-cell *matCellDef="let row; let i = index" style="width: 10%;"> {{i + 1}} </td>
+      <td mat-footer-cell *matFooterCellDef style="width: 10%;"></td>
+    </ng-container>
+
+    <!-- Member Column -->
+    <ng-container matColumnDef="member">
+      <th mat-header-cell *matHeaderCellDef style="width: 30%;"> {{'সদস্য​'}} </th>
+      <td mat-cell *matCellDef="let row" style="width: 30%;">
+        {{ row?.employee?.name }}<br/>
+        {{ row?.employee?.designationName }}<br/>
+        {{ row?.employee?.departmentName }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef style="width: 30%;"></td>
+    </ng-container>
+
+    <!-- Attendance Column -->
+    <ng-container matColumnDef="attendance">
+      <th mat-header-cell *matHeaderCellDef style="width: 10%;">
+        {{'উপস্থিতি'}}
+        <mat-slide-toggle
+          color="primary"
+          [checked]="isAllChecked"
+          (change)="$event ? masterToggle() : null"
+        >
+        </mat-slide-toggle>
+      </th>
+      <td mat-cell *matCellDef="let row" style="width: 10%;">
+        <mat-slide-toggle
+          class="example-margin"
+          color="primary"
+          (change)="$event ? changeAttendance(row) : null"
+          [checked]="checkAttendance(row)"
+        >
+        </mat-slide-toggle>
+      </td>
+      <td mat-footer-cell *matFooterCellDef style="width: 10%;"> {{'সর্বমোট​'}} </td>
+    </ng-container>
+
+    <!-- Honorarium Column -->
+    <ng-container matColumnDef="honorarium">
+      <th mat-header-cell *matHeaderCellDef style="width: 15%;"> {{'সম্মানী'}} </th>
+      <td mat-cell *matCellDef="let row" style="width: 15%;">
+        <mat-form-field style="width: 40% !important;">
+          <input matInput type="number" (ngModelChange)="setValues(row)"
+                 [(ngModel)]="row.honorarium">
+        </mat-form-field>
+      </td>
+      <td mat-footer-cell *matFooterCellDef
+          style="width: 15%;"> {{getTotalHonorarium() | currency: 'BDT'}} </td>
+    </ng-container>
+
+    <!-- Tax Column -->
+    <ng-container matColumnDef="tax">
+      <th mat-header-cell *matHeaderCellDef style="width: 10%;"> {{'ট্যাক্স'}} </th>
+      <td mat-cell *matCellDef="let row" style="width: 10%;">
+        {{setTaxDuty(row) | currency: 'BDT'}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef style="width: 10%;"> {{getTotalTax() | currency: 'BDT'}}</td>
+    </ng-container>
+
+    <!-- Stamp Name Column -->
+    <ng-container matColumnDef="stampFee">
+      <th mat-header-cell *matHeaderCellDef style="width: 10%;"> {{'রাজস্ব ফি'}} </th>
+      <td mat-cell *matCellDef="let row" style="width: 10%;">
+        {{setStampDuty(row) | currency: 'BDT'}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef
+          style="width: 10%;"> {{getTotalStampFee() | currency: 'BDT'}}</td>
+    </ng-container>
+
+    <!-- Payable Column -->
+    <ng-container matColumnDef="payable">
+      <th mat-header-cell *matHeaderCellDef style="width: 15%;"> {{'প্রাপ্য​'}} </th>
+      <td mat-cell *matCellDef="let row" style="width: 15%;">
+        {{setReceivable(row) | currency: 'BDT'}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef
+          style="width: 15%;"> {{getTotalPayable() | currency: 'BDT'}}</td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+  </table>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button [matMenuTriggerFor]="matMenu" color="accent"><i
+    class="fa fa-download"></i>{{' ডাউনলোড করুন​ '}}</button>
+  <button mat-raised-button (click)="onNoClick()" color="warn">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button (click)="save()" color="primary"
+          cdkFocusInitial>{{' সংরক্ষন করুন'}}</button>
+  <mat-menu #matMenu="matMenu" yPosition="below">
+    <button mat-menu-item (click)="downloadReport('attendance')">{{' উপস্থিতি '}}</button>
+    <button mat-menu-item *ngIf="checkSaved()" (click)="downloadReport('honorarium')">{{' সম্মানী '}}</button>
+  </mat-menu>
+</div>
+
+

@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>{{ ' গ্রুপের তথ্য লিখুন ' }}</h1>
+<div mat-dialog-content>
+  <mat-form-field class="example-full-width-modal">
+    <mat-label>{{ ' গ্রুপের নাম * ' }}</mat-label>
+    <textarea matInput placeholder="গ্রুপের নাম যোগ করুন" [(ngModel)]="data.groupName"></textarea>
+  </mat-form-field>
+  <mat-form-field class="example-full-width-modal">
+    <mat-label>{{ ' বর্ণনা ' }}</mat-label>
+    <textarea matInput placeholder="বর্ণনা যোগ করুন" [(ngModel)]="data.description"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="example-button-row" align="end">
+  <button mat-raised-button color="warn" style="float:right; margin:5px" (click)="closeModal()">{{ ' বন্ধ​ করুন ' }}</button>
+  <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="validateAndSave()" cdkFocusInitial>{{ ' সংরক্ষণ করুন ' }}</button>
+</div>

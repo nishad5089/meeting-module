@@ -1,0 +1,45 @@
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+  <mat-form-field class="example-full-width">
+    <mat-label>{{'মিটিং অবস্থা'}}</mat-label>
+    <input
+      matInput
+      name="meeting_status_title"
+      id="meetingStatusTitle"
+      [(ngModel)]="data.dto.meetingStatusTitle"
+      placeholder="মিটিং অবস্থা লিখুন​">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>{{'মিটিং অবস্থা​ ট্যাগ​​'}}</mat-label>
+    <input
+      matInput
+      name="meeting_status_tag"
+      id="meetingStatusTag"
+      [(ngModel)]="data.dto.meetingStatusTag"
+      placeholder="মিটিং অবস্থা​ ট্যাগ​​​ লিখুন​">
+  </mat-form-field>
+  <!--  <mat-form-field class="example-full-width">-->
+  <!--    <mat-label>{{'মিটিং অবস্থা লেবেল'}}</mat-label>-->
+  <!--    <input-->
+  <!--      matInput-->
+  <!--      name="meeting_status_level"-->
+  <!--      id="meetingStatusLevel"-->
+  <!--      [(ngModel)]="data.dto.meetingStatusLevel"-->
+  <!--      placeholder="মিটিং অবস্থা লেবেল লিখুন​">-->
+
+
+  <!--  </mat-form-field>-->
+
+  <mat-form-field class="example-full-width">
+    <mat-label>{{'মিটিং অবস্থা লেবেল'}}*</mat-label>
+    <mat-select [(ngModel)]="data.dto.meetingStatusLevel" placeholder="Select Meeting Frequency">
+      <mat-option *ngFor="let element of [1,2,3,4,5,6,7,8,9,10]" [value]="element">
+        {{element}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions class="example-button-row" align="end">
+  <button mat-raised-button color="primary" [mat-dialog-close]="data.dto">{{' সংরক্ষন করুন'}}</button>
+</div>

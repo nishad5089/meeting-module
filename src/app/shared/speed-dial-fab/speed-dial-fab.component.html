@@ -1,0 +1,23 @@
+<div id="fab-dismiss"
+     *ngIf="fabTogglerState==='active'"
+     (click)="onToggleFab()">
+</div>
+<div class='fab-container' style="elevation: 1000deg"
+     [style.flexDirection]="reverseColumnDirection?'column-reverse':'column'">
+  <button mat-mini-fab class="fab-toggler" matTooltip="অ্যাকশনসমূহ​"
+          (click)="onToggleFab()" color="primary">
+    <i class="material-icons" [@fabToggler]="{value: fabTogglerState}">more_vert</i>
+  </button>
+  <div style="position: absolute; top: 48px;" [className]="reverseColumnDirection?'column-reverse':'column'" [@speedDialStagger]="buttons.length">
+    <button *ngFor="let btn of buttons"
+            mat-mini-fab
+            matTooltip="{{btn.tooltip}}"
+            matTooltipPosition="left"
+            class="fab-secondary"
+            color="secondary"
+            [hidden]="!btn.show"
+            (click)="onClickFab(btn)">
+      <i class="material-icons">{{btn.icon}}</i>
+    </button>
+  </div>
+</div>

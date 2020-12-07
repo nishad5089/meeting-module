@@ -1,0 +1,19 @@
+table {
+  width: 100%;
+}
+
+.example-fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
+}
+
+.example-card {
+  max-width: 100%;
+}
+
+
+
+

@@ -1,0 +1,95 @@
+<div class="overlay"
+     *ngIf="isLoadingResults">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<mat-card>
+  <table class="table" style="border: none" border="0">
+    <tr>
+      <td width="85%" style="border: none">
+        <mat-form-field style="display: inline; width: 30%">
+          <mat-label>অনুসন্ধান</mat-label>
+          <input matInput placeholder="অনুসন্ধানের শব্দাংশ লিখুন" (keyup)="applyFilter($event.target.value)"/>
+        </mat-form-field>
+      </td>
+      <td class="float-right" style="border: none">
+        <button class="btn btn-secondary" matTooltip="{{'অনুসন্ধানের ফিল্টার ঠিক করুন​'}}"
+                (click)="showFilters=!showFilters">
+          <i class="fa fa-filter"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+  <mat-card-content [hidden]="!showFilters">
+    <div class="row">
+      <mat-form-field class="col-md-6">
+        <mat-label>{{'গ্রুপের নাম'}}</mat-label>
+        <mat-select placeholder="{{'গ্রুপের নাম বাছাই করুন'}}" disableOptionCentering
+                    [(ngModel)]="dto.groupName">
+          <mat-option *ngFor="let group of groups" [value]="group.groupName">
+            {{group.groupName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="col-md-6">
+        <mat-label>{{'বর্ণনা'}}</mat-label>
+        <input matInput [(ngModel)]="dto.description" placeholder="{{'গ্রুপের বর্ণনা দিয়ে অনুসন্ধান'}}">
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions [hidden]="!showFilters" align="end">
+    <a class="btn btn-secondary" (click)="reset()" style="margin-right: 5px" matTooltip="{{'অনুসন্ধানের ফিল্ডগুলো রিসেট করুন​'}}">
+      <i class="fa fa-refresh"></i>
+    </a>
+    <a class="btn btn-primary" (click)="search(dto)" matTooltip="{{'অনুসন্ধান করুন​'}}">
+      <i class="fa fa-search"></i>
+    </a>
+    <!--<a class="btn btn-primary" matTooltip="{{'রিসেট'}}">
+      <mat-icon>restore</mat-icon>
+    </a>-->
+  </mat-card-actions>
+</mat-card>
+<br/>
+<div>
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="checkBox">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null; updateSelection()"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      color="primary">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row" >
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="changeSelection(row); updateSelection()"
+                      [checked]="selection.isSelected(row)"
+                      color="primary">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="serialNo">
+      <th mat-header-cell *matHeaderCellDef >{{ ' ক্রমিক নং ' }}</th>
+      <td mat-cell *matCellDef="let row; let i = index"> {{i + 1 | localNumber}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef >{{ ' গ্রুপের নাম ' }}</th>
+      <td mat-cell *matCellDef="let row"> {{ row?.groupName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef > {{ ' বর্ণনা ' }} </th>
+      <td mat-cell *matCellDef="let row"> {{ row?.description }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+
+  </table>
+  <mat-paginator [pageSizeOptions]="[25, 50, 100, 200]" showFirstLastButtons></mat-paginator>
+</div>
+<br/>

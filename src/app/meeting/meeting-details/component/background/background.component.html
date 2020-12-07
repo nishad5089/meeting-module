@@ -1,0 +1,20 @@
+<mat-card style="min-height: 55vh;">
+  <mat-card-content>
+    <div class="row">
+      <div class="col-lg-12 div-mem-mt-bg">
+        <mat-label>{{ 'ই-নথি সূত্র ' }}</mat-label>
+        <p [innerHTML]="enothiReference"></p>
+      </div>
+      <div class="col-lg-12 div-mem-mt-bg">
+        <mat-label>{{ 'পূর্ববর্তী মিটিং সুত্র ' }}</mat-label>
+        <mat-chip-list aria-label="Fish selection" *ngFor="let reference of previousMeetingReferences">
+          &nbsp;&nbsp;&nbsp;<a href="{{ getUrl()}}/{{reference?.referenceOid}}" target="_blank"> {{ reference?.meeting?.meetingTitle }} </a>
+        </mat-chip-list>
+      </div>
+      <div class="col-lg-12 div-mem-mt-bg">
+        <mat-label>{{ 'ব্যাকগ্রাউন্ড ' }}</mat-label>
+        <p [innerHTML]="meetingBackground | nl2br"></p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

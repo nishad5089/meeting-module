@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>{{'টেম্পলেটের ধরন​'}}</mat-label>
+    <mat-select placeholder="Select Meeting Room" [(ngModel)]="data.dto.templateType">
+      <mat-option *ngFor="let template of templateOptions" [value]="template.value">
+        {{template.label}}
+      </mat-option>
+    </mat-select>
+    <button mat-button *ngIf="data.dto.templateType" matSuffix mat-icon-button
+            aria-label="Clear" (click)="data.dto.templateType=undefined; $event.stopPropagation()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <mat-form-field >
+    <mat-label>{{'টেম্পলেটের নাম​'}}</mat-label>
+    <input
+      matInput
+      name="address"
+      id="address"
+      required
+      [(ngModel)]="data.dto.templateTitle"
+      placeholder="টেম্পলেটের নাম​ লিখুন​">
+  </mat-form-field>
+
+  <input [hidden]="data.dialogTitle === 'মিটিংয়ের টেম্পলেট সম্পাদনকরণ​'" type="file" (change)="submitFile($event)" required
+         accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+         placeholder="Upload a file">
+</div>
+<div mat-dialog-actions class="example-button-row" align="end">
+  <button mat-raised-button color="warn" (click)="cancelTemplate()">{{' বন্ধ​ করুন​ '}}</button>
+  <button mat-raised-button color="primary" (click)="uploadTemplate()">{{' সংরক্ষণ করুন '}}</button>
+
+</div>

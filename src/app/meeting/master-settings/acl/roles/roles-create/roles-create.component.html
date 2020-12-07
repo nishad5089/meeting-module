@@ -1,0 +1,52 @@
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>{{'রোল নাম (বাংলা)​​'}}*</mat-label>
+    <input
+      matInput
+      name="role_bn"
+      id = "roleBn"
+      [(ngModel)]="data.dto.roleBn"
+      placeholder="রোল নাম (বাংলা)​​​ লিখুন​">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'রোল নাম (ইং)​'}}</mat-label>
+    <input
+      matInput
+      name="role_en"
+      id = "roleEn"
+      [(ngModel)]="data.dto.roleEn"
+      placeholder="রোল নাম (ইং)​​​ লিখুন​">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'রোল ট্যাগ​'}}*</mat-label>
+    <input
+      matInput
+      name="role_tag"
+      id = "roleTag"
+      [(ngModel)]="data.dto.roleTag"
+      placeholder="রোল​​​ ট্যাগ লিখুন​">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'রোলের প্রকার সিলেক্ট করুন'}}*</mat-label>
+    <mat-select [(ngModel)]="data.dto.roleType" placeholder="রোলের প্রকার">
+      <mat-option *ngFor="let element of ['user','member']" [value]="element">
+        {{element}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'বিবরণ'}}</mat-label>
+    <textarea
+      matInput
+      name="description"
+      id = "description"
+      [(ngModel)]="data.dto.description"
+      placeholder="বিবরণ লিখুন​">
+    </textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" [mat-dialog-close]="data.dto">{{' সংরক্ষন করুন'}}</button>
+</div>

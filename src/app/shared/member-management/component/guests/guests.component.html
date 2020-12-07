@@ -1,0 +1,158 @@
+<div class="overlay"
+     *ngIf="isLoadingResults">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<mat-card>
+  <table class="table" style="border: none" border="0">
+    <tr>
+      <td width="85%" style="border: none">
+        <mat-form-field style="display: inline; width: 30%">
+          <mat-label>অনুসন্ধান</mat-label>
+          <input matInput placeholder="অনুসন্ধানের শব্দাংশ লিখুন" (keyup)="applyFilter($event.target.value)"/>
+        </mat-form-field>
+      </td>
+      <td class="float-right" style="border: none">
+        <button class="btn btn-secondary" matTooltip="{{'অনুসন্ধানের ফিল্টার ঠিক করুন​'}}"
+                (click)="showFilters=!showFilters">
+          <i class="fa fa-filter"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+  <mat-card-content>
+    <div fxLayoutAlign="end">
+    </div>
+    <div [hidden]="!showFilters">
+      <div class="row">
+        <div class="col-md-4">
+          <app-guest-office
+            [reset]="resetVal"
+            [isRequired]="false"
+            [selectedValue]="null"
+            (changed)="setGuestOffice($event)"
+            (newInputValue)="unsetGuestOffice($event)"
+          >
+          </app-guest-office>
+        </div>
+        <div class="col-md-4">
+          <app-guest-department
+            [reset]="resetVal"
+            [isRequired]="false"
+            [selectedValue]="null"
+            (changed)="setGuestDepartment($event)"
+            (newInputValue)="unsetGuestDepartment($event)"
+          >
+          </app-guest-department>
+        </div>
+        <div class="col-md-4">
+          <app-guest-designation
+            [reset]="resetVal"
+            [isRequired]="false"
+            [selectedValue]="null"
+            (changed)="setGuestDesignation($event)"
+            (newInputValue)="unsetGuestDesignation($event)"
+          >
+          </app-guest-designation>
+        </div>
+
+        <mat-form-field class="col-md-4">
+          <mat-label>{{'বাংলা নাম​'}}</mat-label>
+          <input matInput [(ngModel)]="dto.nameBn" placeholder="{{'শব্দাংশ দিয়ে অনুসন্ধান'}}">
+        </mat-form-field>
+        </div>
+    </div>
+    <mat-card-actions [hidden]="!showFilters" align="end">
+      <a class="btn btn-secondary" (click)="reset()" style="margin-right: 5px" matTooltip="{{'অনুসন্ধানের ফিল্ডগুলো রিসেট করুন​'}}">
+        <i class="fa fa-refresh"></i>
+      </a>
+      <a class="btn btn-primary" (click)="search(dto)" matTooltip="{{'অনুসন্ধান করুন​'}}">
+        <i class="fa fa-search"></i>
+      </a>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>
+<br>
+<div>
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="checkBox">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null; updateSelection();"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      color="primary">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row" >
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? changeSelection(row) : null; updateSelection();"
+                      [checked]="isCheckedDisabled(row) || selection.isSelected(row)"
+                      [disabled]="isCheckedDisabled(row)"
+                      color="primary">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="sl">
+      <th mat-header-cell *matHeaderCellDef >{{ ' ক্রমিক নং ' }}</th>
+      <td mat-cell *matCellDef="let row; let i = index" > {{i + 1 | localNumber}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef >{{ ' ইংরেজিতে নাম ' }}</th>
+      <td mat-cell *matCellDef="let row"> {{ row?.nameEn === undefined ? 'N/A': row?.nameEn }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nameInBangla">
+      <th mat-header-cell *matHeaderCellDef > {{ ' বাংলায় নাম ' }} </th>
+      <td mat-cell *matCellDef="let row"> {{ row?.nameBn === undefined ? 'N/A': row?.nameBn }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="organization">
+      <th mat-header-cell *matHeaderCellDef > {{ ' সংগঠন ' }} </th>
+      <td mat-cell *matCellDef="let row"> {{ row?.orgName === undefined ? 'N/A': row?.orgName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="office">
+      <th mat-header-cell *matHeaderCellDef > {{ ' অফিস ' }} </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row?.officeName === undefined ? 'N/A': row?.officeName }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="designation">
+      <th mat-header-cell *matHeaderCellDef > {{ ' পদবি ' }} </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row?.designationName === undefined ? 'N/A': row?.designationName }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="department">
+      <th mat-header-cell *matHeaderCellDef > {{ ' বিভাগ ' }} </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row?.departmentName === undefined ? 'N/A': row?.departmentName }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef > {{ ' ই-মেইল ' }} </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row?.emailAddress === undefined ? 'N/A': row?.emailAddress }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef > {{ ' ফোন ' }} </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row?.contactNo === undefined ? 'N/A': row?.contactNo }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+    <tr mat-row [ngClass]="{'make-blue': isCheckedDisabled(row) == true}" *matRowDef="let row; columns: displayColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[25, 50, 100, 200]" showFirstLastButtons></mat-paginator>
+</div>
+<br/>

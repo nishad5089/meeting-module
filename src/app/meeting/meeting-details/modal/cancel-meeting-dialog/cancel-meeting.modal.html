@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{ ' নিশ্চিত করুন ' }}</h1>
+<div mat-dialog-content>
+  <app-alert></app-alert>
+  <br/>
+  <p>আপনি কি "{{ meeting.meetingTitle}}" মিটিং টি বাতিল কর‍তে চান? </p>
+  <mat-form-field class="example-full-width-modal">
+    <mat-label>{{ ' কারণ* ' }}</mat-label>
+    <textarea matInput placeholder="কারণ লিখুন" [(ngModel)]="meeting.reason"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="example-button-row" align="end">
+  <button mat-raised-button style="float:right; margin:5px; background: #90a4ae" (click)="closeModal()">{{ ' না ' }}</button>
+  <button mat-raised-button [disabled]="meeting.reason === null || meeting.reason === undefined || meeting.reason === ''"
+          color="warn" style="float:right; margin:5px" [mat-dialog-close]="meeting" cdkFocusInitial
+          (click)="cancelMeeting()">{{ ' হ্যাঁ ' }}</button>
+</div>

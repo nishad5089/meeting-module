@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>{{' নিশ্চিত করুন '}}</h1>
+<div mat-dialog-content>
+  <p [innerHtml]="data.message"></p>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="onNoClick()" style="background: #90a4ae">{{ 'না' }}</button>
+  <button mat-raised-button [mat-dialog-close]="true" cdkFocusInitial color="warn">{{ 'হ্যাঁ' }}</button>
+</div>

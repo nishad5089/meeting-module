@@ -1,0 +1,121 @@
+<div class="overlay"
+     *ngIf="isLoadingResults">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<h1 mat-dialog-title>{{ data.type === 'copy' ? 'মিটিং কপি' : 'মিটিং সম্পাদনা'}}</h1>
+<div mat-dialog-content style="background: #90a4ae">
+  <br/>
+  <app-alert></app-alert>
+  <br/>
+  <mat-card>
+    <mat-card-content>
+      <div class="row">
+        <div class="col-lg-12">
+          <mat-form-field>
+            <mat-label>{{' মিটিংয়ের শিরোনাম'}}</mat-label>
+            <input matInput placeholder="Enter Meeting Title" [(ngModel)]="copy.meetingTitle" required>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field>
+            <mat-label>{{' স্মারক নং'}}</mat-label>
+            <input matInput placeholder="Enter Memorandum No." [(ngModel)]="copy.memorandumNumber" required
+                   maxlength="255">
+          </mat-form-field>
+
+          <app-meeting-types
+            [isRequired]="true"
+            [selectedValue]="meetingType"
+            (changed)="setMeetingType($event)"
+          ></app-meeting-types>
+          <app-rooms
+            [isRequired]="true"
+            [selectedValue]="meetingRoom"
+            (changed)="setMeetingRoom($event)"
+          ></app-rooms>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>{{' তারিখ​'}}</mat-label>
+            <input matInput [matDatepicker]="picker" [min]="minDate" [max]="maxDate"
+                   placeholder="Choose a date" required (click)="picker.open()"
+                   [(ngModel)]="copy.meetingSchedule.meetingDate" (ngModelChange)="checkConflict()" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{' মিটিং শুরুর সম​য়'}}​</mat-label>
+            <input matInput placeholder="12hr format (default settings)" [formControl]="startTime"
+                   (ngModelChange)="updateTime('start')" aria-label="12hr format" [ngxTimepicker]="default1" readonly required>
+            <ngx-material-timepicker #default1 [ngxMaterialTimepickerTheme]="darkTheme"></ngx-material-timepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{' মিটিং শেষের​ সম​য়'}}​</mat-label>
+            <input matInput placeholder="12hr format (default settings)" [formControl]="endTime"
+                   (ngModelChange)="updateTime('end')" aria-label="12hr format" [ngxTimepicker]="default2" readonly required>
+            <ngx-material-timepicker #default2 [ngxMaterialTimepickerTheme]="darkTheme"></ngx-material-timepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-12">
+          <mat-form-field>
+            <mat-label>{{'সদস্য সচিব​'}}</mat-label>
+            <div>
+              <input [formControl]="secretary" type="text" required
+                     placeholder="{{'সদস্য সচিব​ বাছাই করুন'}}" matInput [matAutocomplete]="auto2">
+              <mat-autocomplete [displayWith]="displayFn" required=""
+                                autoActiveFirstOption #auto2="matAutocomplete">
+                <mat-option *ngFor="let opt of filteredMemberSecretary$ | async; let index = index" [value]="opt">
+                  {{ displayFn(opt) }}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{' সভাপতি '}}</mat-label>
+            <div>
+              <input [formControl]="chairperson" type="text"
+                     placeholder="{{'সভাপতি বাছাই করুন'}}" matInput [matAutocomplete]="auto1">
+              <mat-autocomplete [displayWith]="displayFn"
+                                autoActiveFirstOption #auto1="matAutocomplete">
+                <mat-option *ngFor="let opt of filteredChairperson$ | async; let index = index" [value]="opt">
+                  {{ displayFn(opt) }}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+          </mat-form-field>
+          <mat-radio-group aria-label="Select an option" [(ngModel)]="radioButtonSelection">
+            <mat-radio-button class="example-radio-button" *ngFor="let option of options" [value]="option.value">
+              {{option.label}}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <br>
+  <mat-card>
+    <mat-card-header>
+      <h4>{{'প্রেক্ষাপট​'}}</h4>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>{{ ' ই-নথি সূত্র ' }}</mat-label>
+        <input matInput placeholder="ই-নথি সূত্র লিখুন" [(ngModel)]="copy.enothiReference">
+      </mat-form-field>
+      <app-previous-reference
+        [selectedValue]="getPreviousReferenceMeetings()"
+        (changed)="setPreviousMeetingReference($event)"
+      >
+      </app-previous-reference>
+      <mat-form-field>
+        <mat-label>{{ ' ব্যাকগ্রাউন্ড ' }}</mat-label>
+        <textarea matInput placeholder="ব্যাকগ্রাউন্ড লিখুন" [(ngModel)]="copy.meetingBackground"></textarea>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+  <br>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="close()" color="warn">{{'বন্ধ​ করুন​'}}</button>
+  <button mat-raised-button color="primary" [disabled]="isConflicted" (click)="save()">{{'সংরক্ষণ করুন​'}}</button>
+</div>

@@ -1,0 +1,17 @@
+<div *ngIf="message && message.text" [ngClass]="message.cssClass"
+     class="alert alert-warning alert-dismissible fade show"
+     [style.margin-right]="setRight()"
+     [style.margin-left]="setLeft()"
+     [style.margin-bottom]="setBottom()"
+     role="alert">
+  <div [hidden]="errorsList.length === 1">{{' অনুগ্রহ করে নিচের ত্রুটিগুলো ঠিক করুন​: '}}</div>
+  <ul [hidden]="errorsList.length === 1">
+    <li *ngFor="let err of errorsList">
+      {{err}}
+    </li>
+  </ul>
+  <div [hidden]="errorsList.length !== 1">{{errorsList[0]}}</div>
+  <button type="button" class="close" (click)="clear()" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>

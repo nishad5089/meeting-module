@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>{{ ' মন্তব্য যোগ করুন ' }}</h1>
+<div mat-dialog-content>
+  <mat-form-field class="example-full-width-modal">
+    <mat-label>{{ ' মন্তব্য ' }}</mat-label>
+    <textarea matInput placeholder="মন্তব্য লিখুন" [(ngModel)]="data"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="example-button-row" align="end">
+  <button mat-raised-button color="warn" style="float:right; margin:5px" (click)="closeModal()">{{ ' বন্ধ​ করুন ' }}</button>
+  <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="validateAndSave()" cdkFocusInitial>{{ ' সংরক্ষণ করুন ' }}</button>
+</div>

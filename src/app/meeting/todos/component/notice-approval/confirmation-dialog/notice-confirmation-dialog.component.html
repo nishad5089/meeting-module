@@ -1,0 +1,18 @@
+<h1 mat-dialog-title> Confirmation </h1>
+<div mat-dialog-content>
+  <p *ngIf="data.value === 'approve'">আপনি কি নিশ্চিত আপনি <b>{{data.meetingName}}</b> শীর্ষক মিটিংয়ের নোটিশটি <b>{{'অনুমোদন'}}</b> করতে চান​?</p>
+  <p *ngIf="data.value === 'correction'">আপনি কি নিশ্চিত আপনি <b>{{data.meetingName}}</b> শীর্ষক মিটিংয়ের নোটিশটি <b>{{'সংশোধন'}}</b>-এর জন্য পাঠাতে চান​?</p>
+  <mat-form-field>
+    <mat-label>{{' মন্তব্য '}}</mat-label>
+    <textarea [required]="data.value !== 'approve'" matInput
+              [formControl]="commentControl" placeholder="{{' দ​য়া করে মন্তব্য লিখুন ​'}}"></textarea>
+  </mat-form-field>
+  <mat-error *ngIf="data.value !== 'approve' &&
+  commentControl.invalid" style="font-size: small">{{' দ​য়া করে মন্তব্য লিখুন​ '}}</mat-error>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="onNoClick()" color="warn">{{ ' না ' }}</button>
+  <button mat-raised-button [mat-dialog-close]="sendData()"
+          [disabled]="data.value !== 'approve' && commentControl.invalid"
+          cdkFocusInitial style="background: #90a4ae">{{ ' হ্যাঁ ' }}</button>
+</div>

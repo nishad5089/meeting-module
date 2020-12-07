@@ -1,0 +1,33 @@
+<div class="overlay"
+     *ngIf="loading">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<mat-card>
+  <mat-card-content>
+    <div class="float-right">
+      <button class="btn btn-primary" color="primary" (click)="save()">{{' সংরক্ষণ করুন​'}}</button>
+    </div>
+    <table mat-table [dataSource]="dataSource" class="mem-table-full-width">
+      <ng-container [matColumnDef]="column.roleBn" *ngFor="let column of roles; let index">
+        <th mat-header-cell *matHeaderCellDef> {{column.roleBn}} </th>
+        <td mat-cell *matCellDef="let element">
+          <div style="text-align: left" [hidden]="column.roleBn !== ' '">
+            {{element.actionBn}}
+          </div>
+          <div [hidden]="column.roleBn === ' '">
+            <mat-checkbox (change)="onChange(column, element, permissionMap.get(column.roleTag + element.actionTag))"
+                          [checked]="checkPermission(column, element)"
+                          color="primary">
+            </mat-checkbox>
+            <button class="btn-primary" *ngIf="checkPermission(column, element) && permissionMap.get(column.roleTag + element.actionTag).oid"
+            (click)="setStatusPermission(column, element, permissionMap.get(column.roleTag + element.actionTag))">
+              Details
+            </button>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

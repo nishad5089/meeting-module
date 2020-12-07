@@ -1,0 +1,46 @@
+<h1 mat-dialog-title>{{'মিটিংয়ের সম​য়সূচী পরিবর্তন​'}}</h1>
+<div mat-dialog-content style="max-height: 60vh;">
+  <app-alert></app-alert>
+  <br/>
+  <div class="overlay"
+       *ngIf="isLoadingResults">
+    <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+  </div>
+
+  <app-rooms
+    [isRequired]="true"
+    [selectedValue]="meetingRoom"
+    (changed)="setMeetingRoom($event)"
+  ></app-rooms>
+
+  <mat-form-field >
+    <mat-label>{{' তারিখ​ '}}</mat-label>
+    <input matInput [matDatepicker]="picker" [min]="minDate" [max]="maxDate" placeholder="Choose a date" required
+           (click)="picker.open()" [(ngModel)]="copy.meetingSchedule.meetingDate" (ngModelChange)="checkConflict()" readonly>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{' মিটিং শুরুর সম​য় '}}​</mat-label>
+    <input matInput placeholder="12hr format (default settings)" [formControl]="startTime"
+           (ngModelChange)="updateTime('start')" aria-label="12hr format" [ngxTimepicker]="default1" readonly required>
+    <ngx-material-timepicker #default1 [ngxMaterialTimepickerTheme]="darkTheme"></ngx-material-timepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{' মিটিং শেষের​ সম​য় '}}​</mat-label>
+    <input matInput placeholder="12hr format (default settings)" [formControl]="endTime"
+           (ngModelChange)="updateTime('end')" aria-label="12hr format" [ngxTimepicker]="default2" readonly required>
+    <ngx-material-timepicker #default2 [ngxMaterialTimepickerTheme]="darkTheme"></ngx-material-timepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{' কারণ '}}</mat-label>
+    <textarea matInput placeholder="{{'মিটিংয়ের সম​য়সূচী পরিবর্তনের কারণ লিখুন​'}}" [required]="true" [(ngModel)]="copy.reason"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="close()" color="warn">{{'বন্ধ​ করুন​'}}</button>
+  <button mat-raised-button color="primary" [disabled]="isConflicted" (click)="reSchedule()">{{'সংরক্ষণ করুন​'}}</button>
+</div>

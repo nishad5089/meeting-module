@@ -1,0 +1,94 @@
+<app-header
+  [navbarBrandRouterLink]="['/']"
+  [fixed]="false"
+  [navbarBrandFull]="{src: 'assets/img/brand/grp_full.svg', width: 89, height: 25, alt: 'GRP Logo'}"
+  [navbarBrandMinimized]="{src: 'assets/img/brand/grp_symbol.svg', width: 24, height: 24, alt: 'GRP Logo'}"
+  [sidebarToggler]="'lg'"
+  [asideMenuToggler]="false"
+  [mobileAsideMenuToggler]="false"
+  style="background-color: #1D2345; border: none;">
+  <!--  [asideMenuToggler]="'lg'">-->
+  <!--  <ul style="visibility: hidden" class="nav navbar-nav d-md-down-none mr-auto">-->
+  <!--    <li class="nav-item px-3">-->
+  <!--      <a class="nav-link" href="/">Dashboard</a>-->
+  <!--    </li>-->
+  <!--  </ul>-->
+
+  <ul class="nav navbar-nav d-md-down-none mr-auto">
+    <li class="nav-item px-3" style="color: white;">
+      {{user.orgName}}
+    </li>
+  </ul>
+  <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item dropdown d-md-down-none" dropdown placement="bottom right">
+      <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle
+         (click)="clickNtfBar()" style="cursor: pointer; color: white;">
+        <i class="fa fa-bell"></i>
+        <span class="badge badge-pill badge-danger" [hidden]="notificationCount === 0">
+          {{notificationCount | localNumber}}
+        </span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg" style="width: 500px;"
+           *dropdownMenu aria-labelledby="simple-dropdown">
+        <div class="dropdown-header text-center" [hidden]="notificationCount === 0">
+          <strong>আপনার {{notificationCount | localNumber}}টি নতুন নোটিফিকেশন রয়েছে</strong>
+        </div>
+        <div class="dropdown-header text-center" [hidden]="notificationCount !== 0">
+          <strong>আপনার কোনো নতুন নোটিফিকেশন নেই</strong>
+        </div>
+        <div style="max-height: 75vh; overflow: auto;">
+          <a (click)=goToUrl(ntf) class="dropdown-item" *ngFor="let ntf of notifications"
+             [style.cursor]="setPointer(ntf)" [style.background]="setBackground(ntf)"
+             style="word-break: break-word; white-space: unset;">
+            <table class="table" style="border: none; margin: unset;">
+              <tr>
+                <td width="10%" style="border: none; padding: unset;">
+                  <i class="icon-user-follow text-success"></i>
+                </td>
+                <td width="90%" style="border: none; padding: unset;">
+                  {{ntf.notificationContent}}
+                  <p class="text-muted" style="margin-bottom: unset; font-size: smaller;">{{ntf.sentOn | timeAgo | localNumber}}</p>
+                </td>
+              </tr>
+            </table>
+          </a>
+        </div>
+      </div>
+    </li>
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+         dropdownToggle (click)="false" style="color: white">
+        <i class="fa fa-user-circle fa-lg"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+        <a class="dropdown-item" (click)="goToGlobalDashboard()"><i
+          class="cui-dashboard icons"></i> {{' জিআরপি ড্যাশবোর্ড​ '}}</a>
+        <a class="dropdown-item" (click)="logOut()"><i class="fa fa-lock"></i> {{' লগ আউট​ '}}</a>
+      </div>
+    </li>
+    <li style="color: white">
+      {{user?.name}}&nbsp;&nbsp;
+    </li>
+  </ul>
+</app-header>
+<div class="app-body">
+  <app-sidebar [fixed]="false" [display]="'lg'" style="background-color: #1D2345">
+    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
+    <app-sidebar-minimizer style="background-color: #1D2345"></app-sidebar-minimizer>
+  </app-sidebar>
+  <!-- Main content -->
+  <main class="main">
+    <!-- Breadcrumb -->
+    <cui-breadcrumb></cui-breadcrumb>
+    <app-alert *ngIf="isAlertOpen()" style="z-index: 100;"></app-alert>
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
+    </div><!-- /.container-fluid -->
+  </main>
+  <!--  <app-aside [fixed]="true" [display]="false">-->
+
+  <!--  </app-aside>-->
+</div>
+<app-footer [fixed]="false">
+  <span class="ml-auto">Powered by <a href="https://cokreates.com">CoKreates Limited</a></span>
+</app-footer>

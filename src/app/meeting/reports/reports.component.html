@@ -1,0 +1,54 @@
+<mat-card style="height: 65vh; overflow: auto; flex-direction: column; display: flex;">
+  <div class="overlay"
+       *ngIf="isLoadingResults">
+    <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+  </div>
+  <mat-card-content>
+    <div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>{{'তারিখ হতে'}}</mat-label>
+            <input
+              matInput
+              readonly
+              required=""
+              [matDatepicker]="pickerFrom"
+              (click)="pickerFrom.open()"
+              placeholder="{{'তারিখ হতে বাছাই করুন​'}}"
+              [(ngModel)]="dto.taxStartDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+            <!--        <mat-error *ngIf="errorHandling('date', 'required')">-->
+            <!--          Please enter <strong>meeting date</strong>-->
+            <!--        </mat-error>-->
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>{{'তারিখ পর্যন্ত​'}}</mat-label>
+            <input
+              matInput
+              readonly
+              required=""
+              [matDatepicker]="pickerTo"
+              placeholder="{{'তারিখ পর্যন্ত বাছাই করুন​​'}}"
+              (click)="pickerTo.open()"
+              [(ngModel)]="dto.taxEndDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo></mat-datepicker>
+            <!--        <mat-error *ngIf="errorHandling('date', 'required')">-->
+            <!--          Please enter <strong>meeting date</strong>-->
+            <!--        </mat-error>-->
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-raised-button style="background: #20a8d8;color: white;" (click)="downloadReport()">
+      <mat-icon>cloud_download</mat-icon>
+      {{'ডাউনলোড করুন'}}
+    </button>
+  </mat-card-actions>
+</mat-card>

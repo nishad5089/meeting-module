@@ -1,0 +1,78 @@
+<h1 mat-dialog-title>{{'এক্সটারনাল মিটিং বিবরণ'}}</h1>
+<div mat-dialog-content>
+  <!--<div class="example-loading-shade"
+       *ngIf="isLoadingResults">
+    <mat-spinner diameter="50" *ngIf="isLoadingResults"></mat-spinner>
+  </div>-->
+  <div class="row">
+    <div class="col-md-12">
+      <h2>{{data?.meetingTitle}}</h2>
+    </div>
+    <div class="col-md-6">
+      <mat-label>{{'স্মারক নং :​'}}</mat-label>
+      <p>
+        {{ data?.meetingReference === undefined ||
+      data?.meetingReference === null ||
+      data?.meetingReference === '' ? 'N/A' : data?.meetingReference}}
+      </p>
+    </div>
+    <div class="col-md-6">
+      <mat-label>{{'মিটিং এর কক্ষ :'}}</mat-label>
+      <p>
+        {{ data?.meetingRoom === undefined ||
+      data?.meetingRoom === null ||
+      data?.meetingRoom === '' ? 'N/A' : data?.meetingRoom}}
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <mat-label>{{'মিটিং এর ধরণ :​'}}</mat-label>
+      <p>
+        {{ data?.meetingType === undefined ||
+          data?.meetingType === null ||
+          data?.meetingType === '' ? 'N/A' : data?.meetingType}}
+      </p>
+    </div>
+    <div class="col-md-6">
+      <mat-label>{{'তারিখ :'}}</mat-label>
+      <p>
+        {{ data?.meetingDate === undefined ||
+      data?.meetingDate === null ? 'N/A' : data?.meetingDate | date: 'fullDate' | localNumber}}
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <mat-label>{{'চেয়ারপারসন :​'}}</mat-label>
+      <p>
+        {{ data?.meetingChairperson === undefined ||
+      data?.meetingChairperson === null ||
+      data?.meetingChairperson === '' ? 'N/A' : data?.meetingChairperson}}
+      </p>
+    </div>
+    <div class="col-md-6">
+      <mat-label>{{'মিটিং শুরুর সময় :'}}</mat-label>
+      <p>
+        {{ data?.startTime === undefined ||
+      data?.startTime === null ? 'N/A' : data?.startTime | date: 'bbbb hh:mm' | localNumber}}
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-6">
+      <mat-label>{{'মিটিং শেষের সময় :'}}</mat-label>
+      <p>
+        {{ data?.endTime === undefined ||
+      data?.endTime === null ? 'N/A' : data?.endTime | date: 'bbbb hh:mm' | localNumber}}
+      </p>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions class="example-button-row" align="end">
+  <button mat-raised-button color="warn" (click)="cancel()">{{'বন্ধ​ করুন​'}}</button>
+</div>
+

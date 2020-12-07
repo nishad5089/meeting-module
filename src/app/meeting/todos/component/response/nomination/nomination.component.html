@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{'মনোনীতকরণ​'}}</h1>
+<div mat-dialog-content [hidden]="loading">
+  <mat-form-field>
+    <input
+      matInput
+      [matAutocomplete]="auto"
+      placeholder="{{'কর্মকর্তার তথ্য দিয়ে খুঁজুন​'}}"
+      [formControl]="myControl">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngFor="let option of filteredMembers$ | async" [value]="option">
+        {{displayFn(option)}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" (click)="onCancelClick()">{{'বন্ধ​ করুন​'}}</button>
+  <button mat-raised-button color="primary" [disabled]="isInvalid()" [mat-dialog-close]="myControl.value"
+          cdkFocusInitial>{{'যোগ করুন​'}}</button>
+</div>
+

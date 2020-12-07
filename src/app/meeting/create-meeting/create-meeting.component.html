@@ -1,0 +1,38 @@
+<div class="overlay"
+     [hidden]="!isLoadingResults">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<mat-tab-group [(selectedIndex)]="selectedIndex" mat-stretch-tabs>
+  <mat-tab label="{{'প্রেক্ষাপট'}}">
+    <app-background (formEvent)="receiveBackground($event)" (referenceEvent)="receiveReferences($event)"
+    (filesEmit)="receiveBackgroundFiles($event)" (attachmentEvent)="receiveBackgroundAttachments($event)"></app-background>
+    <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="nextTab()">{{'পরবর্তী​'}}</button>
+  </mat-tab>
+  <mat-tab label="{{'মৌলিক তথ্য'}}">
+    <app-basic-info (formEvent)="receiveBasicInfo($event)"
+                    (conflictEvent)="receiveConflict($event)"
+                    (loadingEvent)="receiveLoading($event)"></app-basic-info>
+    <div class="align-content-end">
+      <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="nextTab()">{{'পরবর্তী​'}}</button>
+      <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="previousTab()">{{'পূর্ববর্তী'}}</button>
+      <button mat-raised-button color="primary" style="float:right; margin:5px" [disabled]="!isDraftValid" [hidden]="true">{{'খস​ড়া সংরক্ষণ করুন'}}</button>
+    </div>
+  </mat-tab>
+  <mat-tab label="{{'আলোচ্যসূচী'}}">
+    <app-agenda (agendaEvent)="receiveAgenda($event)"></app-agenda>
+    <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="nextTab()">{{'পরবর্তী​'}}</button>
+    <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="previousTab()">{{'পূর্ববর্তী'}}</button>
+  </mat-tab>
+  <mat-tab label="{{' গুরুত্বপূর্ণ ব্যক্তি '}}">
+    <app-key-personnel (formEvent)="receiveKeypersonnel($event)" ></app-key-personnel>
+    <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="nextTab()">{{'পরবর্তী​'}}</button>
+    <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="previousTab()">{{'পূর্ববর্তী'}}</button>
+  </mat-tab>
+  <mat-tab label="{{'সংযুক্তি'}}">
+    <app-attachments (attachmentEvent)="receiveAttachments($event)"
+                      (filesEmit)="receiveFiles($event)"></app-attachments>
+    <button mat-raised-button color="primary" style="float: right; margin: 5px" [disabled]="!checkValidity() || isLoadingResults" (click)="saveMeeting()">{{'সংরক্ষণ করুন'}}</button>
+    <button mat-raised-button color="primary" style="float: right; margin: 5px" (click)="previousTab()">{{'পূর্ববর্তী'}}</button>
+  </mat-tab>
+</mat-tab-group>
+

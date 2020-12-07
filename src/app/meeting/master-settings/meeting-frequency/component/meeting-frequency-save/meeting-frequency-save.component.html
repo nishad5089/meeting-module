@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Frequency</mat-label>
+    <input
+      type="hidden"
+      readonly
+      name="oid"
+      id="oid"
+      [(ngModel)]="data.dto.oid">
+    <input
+      matInput
+      name="frequency"
+      id="frequencyName"
+      required
+      [(ngModel)]="data.dto.frequency"
+      placeholder="Enter Meeting Frequency">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="accent" [mat-dialog-close]="">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data.dto">{{' সংরক্ষন করুন'}}</button>
+</div>
+
+
+

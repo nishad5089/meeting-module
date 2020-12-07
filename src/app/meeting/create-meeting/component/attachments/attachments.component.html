@@ -1,0 +1,59 @@
+<mat-card style="min-height: 55vh;">
+  <mat-card-content>
+    <div>
+      <button mat-icon-button style="color: white; background: #673ab7; float:right; margin:27px"
+              matTooltip="সংযুক্তি আপলোড​ করুন"
+              (click)="openDialog()">
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+    </div>
+    <br><br>
+    <h3 class="box-title">{{' &nbsp; '}}</h3>
+    <div>
+      <div class="mem-list-table-container">
+        <table class="mem-table-full-width" mat-table [dataSource]="dataSource" matSort>
+
+          <!-- Serial Column -->
+          <ng-container matColumnDef="serialNo">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 10%;">{{ ' ক্রমিক নং ' }}</th>
+            <td mat-cell *matCellDef="let row; let i = index"> {{i + 1 | localNumber}} </td>
+          </ng-container>
+
+          <!-- File Type Column -->
+          <ng-container matColumnDef="attachmentType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center; width: 20%">{{ ' সংযুক্তির ধরন ' }}</th>
+            <td mat-cell *matCellDef="let row">
+              <mat-select [(value)]="row.attachmentType" placeholder="File Type">
+                <mat-option value="wp">কার্যপত্র​</mat-option>
+                <mat-option value="go">সরকারি আদেশ​</mat-option>
+              </mat-select>
+            </td>
+          </ng-container>
+
+          <!-- File Name Column -->
+          <ng-container matColumnDef="fileTitle">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center; width: 50%">{{ ' সংযুক্তির নাম ' }}</th>
+            <td mat-cell *matCellDef="let row; let i = index"> {{row.fileTitle}}</td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;">{{ ' অ্যাকশন ' }}</th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <a
+                class="btn btn-danger" matTooltip="{{'মুছে ফেলুন​'}}​"
+                (click)="deleteFile(i)">
+                <i class="fa fa-trash"></i>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+

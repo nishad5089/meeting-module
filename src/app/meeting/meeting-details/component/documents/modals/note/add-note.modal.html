@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>{{ getTitle() }}</h1>
+<div mat-dialog-content>
+  <app-meeting-agenda
+    [options]="data.agendas"
+    [isRequired]="true"
+    [selectedValue]="data.note.agenda"
+    (changed)="callbackAgendaSelected($event)"
+  >
+  </app-meeting-agenda>
+  <app-speaker
+    [isRequired]="true"
+    [options]="data.invitees"
+    [selectedValue]="data.note.spreakerEmployee"
+    (changed)="callbackEmployeeSelected($event)"
+  >
+  </app-speaker>
+  <mat-form-field>
+    <mat-label>{{ ' নোট ' }}</mat-label>
+    <textarea matInput placeholder="নোট যোগ করুন" [(ngModel)]="copyNote.note" required></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button class="btn btn-mem-modal-close" color="warn" style="margin:5px" (click)="closeModal()">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button class="btn btn-mem-modal-submit" color="primary" style="margin:5px" (click)="saveNote()" cdkFocusInitial>{{' সংরক্ষন করুন'}}</button>
+</div>

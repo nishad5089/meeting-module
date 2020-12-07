@@ -1,0 +1,92 @@
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+  <app-alert></app-alert>
+  <br/>
+  <div class="overlay"
+       *ngIf="isLoadingResults">
+    <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>{{'বাংলা নাম​'}}</mat-label>
+        <input matInput [(ngModel)]="guest.nameBn" placeholder="{{'বাংলা নাম লিখুন​'}}">
+        <mat-hint></mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>{{'ইংরেজি নাম'}}</mat-label>
+        <input matInput [(ngModel)]="guest.nameEn" placeholder="{{'ইংরেজি নাম লিখুন​'}}">
+        <mat-hint></mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>{{'ই-মেইল​'}}</mat-label>
+        <input matInput [(ngModel)]="guest.emailAddress" type="email" [email]="true" placeholder="{{'ই-মেইল​ লিখুন​'}}">
+        <mat-hint></mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>{{'মোবাইল নাম্বার​'}}</mat-label>
+        <input matInput [(ngModel)]="guest.contactNo" pattern="01[3456789][0-9]{8}" maxlength="11" placeholder="{{'মোবাইল নাম্বার​ লিখুন​'}}">
+        <mat-hint>{{''}}</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <app-guest-office
+        [isRequired]="false"
+        [selectedValue]="guestOffice"
+        (changed)="setGuestOffice($event)"
+        (newInputValue)="setNewOffice($event)"
+      >
+      </app-guest-office>
+    </div>
+    <div class="col-md-6">
+      <app-guest-department
+        [isRequired]="false"
+        [selectedValue]="guestDepartment"
+        (changed)="setGuestDepartment($event)"
+        (newInputValue)="setNewDepartment($event)"
+      >
+      </app-guest-department>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <app-guest-designation
+        [isRequired]="false"
+        [selectedValue]="guestDesignation"
+        (changed)="setGuestDesignation($event)"
+        (newInputValue)="setNewDesignation($event)"
+      >
+      </app-guest-designation>
+    </div>
+  </div>
+  <div class="row" [hidden]="true">
+    <div class="col-md-6" style="padding-left: unset !important;">
+      <mat-label>{{'প্রোফাইল পিকচার​​ :&nbsp;&nbsp;'}}</mat-label>
+      <input type="file" (change)="show($event, 'pro')" accept="image/png, image/jpeg"
+             placeholder="{{'ছবি আপলোড​​ *'}}">
+      <mat-hint></mat-hint>
+    </div>
+    <div class="col-md-6" style="padding-left: unset !important;">
+      <mat-label>{{'স্বাক্ষরের ছবি :&nbsp;&nbsp;'}}</mat-label>
+      <input type="file" (change)="show($event, 'sig')" accept="image/png, image/jpeg"
+             placeholder="{{'ছবি আপলোড​ *'}}">
+      <mat-hint></mat-hint>
+    </div>
+  </div>
+  <br/>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="cancel()" color="warn">{{'বন্ধ​ করুন​'}}</button>
+<!--  <button mat-raised-button (click)="save()" cdkFocusInitial style="background: #90a4ae">{{'সংরক্ষণ করুন​'}}</button>-->
+  <button mat-raised-button color="primary" (click)="validateAndSave()">{{'সংরক্ষণ করুন​'}}</button>
+</div>

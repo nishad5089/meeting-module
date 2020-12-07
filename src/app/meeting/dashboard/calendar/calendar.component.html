@@ -1,0 +1,117 @@
+<mat-card>
+  <table class="table" style="border: none; margin: 0">
+    <tr>
+      <td width="60%" style="border: none; padding: 0">
+        <mat-form-field style="display: inline; width: 30%">
+          <mat-label>{{'শিরোনাম​, স্মারক নং, আলোচ্য বিষ​য়​, নোট​, আলোচনা, সিদ্ধান্ত বা বাস্তবায়ন'}}</mat-label>
+          <input matInput [(ngModel)]="dto.searchField" (keydown)="keyDownFunction($event)"
+                 placeholder="{{'শিরোনাম​, স্মারক নং, আলোচ্য বিষ​য়​, নোট​, আলোচনা, সিদ্ধান্ত বা বাস্তবায়নে দিয়ে অনুসন্ধান'}}">
+        </mat-form-field>
+      </td>
+      <td width="30%" style="border: none; padding: 0">
+        <app-rooms
+          [isRequired]="false"
+          [selectedValue]="null"
+          (changed)="setMeetingRoom($event)"
+        ></app-rooms>
+      </td>
+      <td class="float-left" style="border: none; padding: 0; padding-right: 4px">
+        <button class="btn btn-primary" (click)="search(dto)">
+          <i class="fa fa-search"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+</mat-card>
+<br/>
+<mat-card>
+  <div class="overlay"
+       [hidden]="!loading">
+    <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+  </div>
+  <br/>
+  <mat-card-content>
+    <div class="row">
+      <div class="col-lg-9">
+        <div class="row text-center">
+          <div class="col-md-4">
+            <mat-button-toggle-group value="today"
+                                     style="width: auto; height: 6vh; font-size: small; font-weight: bold; align-items: center">
+              <mat-button-toggle style="background: #efefef;" value="previous" mwlCalendarPreviousView class="checked"
+                                 [view]="view"
+                                 [(viewDate)]="viewDate"
+                                 (viewDateChange)="closeOpenMonthViewDay()">{{'পূর্ববর্তী'}}
+              </mat-button-toggle>
+              <mat-button-toggle style="background: #efefef;" value="today" mwlCalendarToday class="checked"
+                                 [(viewDate)]="viewDate"
+                                 (viewDateChange)="closeOpenMonthViewDay()">{{'বর্তমান​'}}
+              </mat-button-toggle>
+              <mat-button-toggle style="background: #efefef;" value="next" mwlCalendarNextView class="checked"
+                                 [view]="view"
+                                 [(viewDate)]="viewDate"
+                                 (viewDateChange)="closeOpenMonthViewDay()">{{'পরবর্তী'}}
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+          <div class="col-md-4">
+            <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'bn-BD' | localNumber }}</h3>
+          </div>
+          <div class="col-md-4">
+            <mat-button-toggle-group value="month"
+                                     style="width: auto; height: 6vh; font-size: small; font-weight: bold; align-items: center">
+              <mat-button-toggle style="background: cornsilk !important;" value="day"
+                                 (click)="setView(CalendarView.Day)" class="checked"
+                                 [class.active]="view === CalendarView.Day">{{'দিন​'}}
+              </mat-button-toggle>
+              <mat-button-toggle style="background: cornsilk !important;" value="week"
+                                 (click)="setView(CalendarView.Week)" class="checked"
+                                 [class.active]="view === CalendarView.Week">{{'সপ্তাহ​'}}
+              </mat-button-toggle>
+              <mat-button-toggle style="background: cornsilk !important;" value="month"
+                                 (click)="setView(CalendarView.Month)" class="checked"
+                                 [class.active]="view === CalendarView.Month">{{'মাস​'}}
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+        <br><br>
+        <div [ngSwitch]="view">
+          <mwl-calendar-month-view
+            *ngSwitchCase="CalendarView.Month"
+            [viewDate]="viewDate"
+            [refresh]="refresh"
+            [events]="events"
+            [locale]="'bn-BD'"
+            [activeDayIsOpen]="activeDayIsOpen"
+            (dayClicked)="calendarClicked($event.day.date, $event.day.events, false)"
+            (eventClicked)="handleEvent('Clicked', $event.event)"
+          >
+          </mwl-calendar-month-view>
+          <mwl-calendar-week-view
+            *ngSwitchCase="CalendarView.Week"
+            [refresh]="refresh"
+            [viewDate]="viewDate"
+            [locale]="'bn-BD'"
+            [events]="events"
+            (eventClicked)="handleEvent('Clicked', $event.event)"
+            (hourSegmentClicked)="calendarClicked($event.date, undefined)"
+          >
+          </mwl-calendar-week-view>
+          <mwl-calendar-day-view
+            *ngSwitchCase="CalendarView.Day"
+            [refresh]="refresh"
+            [viewDate]="viewDate"
+            [locale]="'bn-BD'"
+            [events]="events"
+            (eventClicked)="handleEvent('Clicked', $event.event)"
+            (hourSegmentClicked)="calendarClicked($event.date, undefined)"
+          >
+          </mwl-calendar-day-view>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <app-dashboard-todos (loadingEvent)="receiveLoading($event)"></app-dashboard-todos>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

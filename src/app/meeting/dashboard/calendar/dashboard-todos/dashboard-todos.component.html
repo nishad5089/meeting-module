@@ -1,0 +1,20 @@
+<mat-card style="margin-bottom: 16px;height: 99vh; overflow: auto; flex-direction: column; display: flex;">
+  <mat-card-header>
+    <mat-card-title>{{'করণীয়​'}}</mat-card-title>
+    <span matBadge="{{todos.length | localNumber}}" matBadgeColor="primary"></span>
+  </mat-card-header>
+  <mat-card-content style="overflow-y: auto;">
+    <mat-list>
+      <mat-card *ngFor="let element of todos" style="background: #cae9de; margin-bottom: 2%;">
+        <mat-card-header></mat-card-header>
+        <mat-card-content align="start"><p>{{element.msg}}</p>
+        </mat-card-content>
+       <!-- <mat-card-actions align="end">
+          &lt;!&ndash;<button mat-icon-button>
+            <mat-icon>done</mat-icon>
+          </button>&ndash;&gt;
+        </mat-card-actions>-->
+      </mat-card>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

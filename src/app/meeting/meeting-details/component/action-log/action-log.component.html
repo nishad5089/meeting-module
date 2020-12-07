@@ -1,0 +1,63 @@
+<mat-card style="min-height: 55vh;">
+  <mat-card-content>
+    <mat-horizontal-stepper [linear]="false" *ngIf="steps && steps.length" [selectedIndex]="currentStep"
+                            [labelPosition]="'bottom'">
+      <ng-template matStepperIcon="error">
+        <mat-icon>close</mat-icon>
+      </ng-template>
+      <ng-template matStepperIcon="done" let-index="index">
+        <mat-icon *ngIf="steps[index].state === 'done'">done</mat-icon>
+        <mat-icon *ngIf="steps[index].state === 'error'">close</mat-icon>
+      </ng-template>
+      <ng-template matStepperIcon="number" let-index="index">
+        {{index + 1 | localNumber}}
+      </ng-template>
+      <mat-step *ngFor="let step of steps"
+                [label]="step.label"
+                [state]="step.state"
+                [editable]="false"
+                [completed]="step.step <= currentStep">
+      </mat-step>
+    </mat-horizontal-stepper>
+    <div class="col-md-12" style="width: 350px; padding-bottom: 5px;" *ngIf="steps && steps.length">
+      <div class="row" style="font-size: small;">
+        <div class="col-md-2">
+          {{'সূচকঃ '}}
+        </div>
+        <div class="col-md-3">
+          <i class="fa fa-check-circle" style="color: #4CAF50; font-size: 20px;"></i>{{' সম্পন্ন'}}
+        </div>
+        <div class="col-md-4">
+          <i class="fa fa-times-circle" style="color: #4CAF50; font-size: 20px;"></i>{{' অসম্পন্ন'}}
+        </div>
+        <div class="col-md-3">
+          <i class="fa fa-circle" style="color: rgba(0, 0, 0, 0.54); font-size: 20px;"></i>{{' মুলতবি'}}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="actionLogs && actionLogs.length > 0">
+      <mat-card class="mat-elevation-z5" *ngFor="let log of actionLogs" style="margin-bottom: 5px;">
+        <mat-card-content>
+          <div class="row">
+            <div class="col-md-1" style="font-size: x-large; text-align: center; color: #746a37; padding-right: unset;">
+              <i [class]="getIconClass(log.logType)"></i>
+            </div>
+            <div [class]="setViewTextClass(log)">
+              {{log.viewText}}
+              <p class="text-muted" style="margin-bottom: unset;">{{log.createdOn | timeAgo | localNumber}}</p>
+            </div>
+            <div *ngIf="log.details" [class]="setDetailsClass(log)">
+              <button mat-icon-button style="font-size: larger; color: #63c2de;" [matMenuTriggerFor]="details">
+                <i class="fa fa-info-circle"></i>
+              </button>
+            </div>
+            <mat-menu #details style="min-width: 150px;">
+              <p style="margin-top: 10px; margin-left: 10px;" class="multi_lines_text">{{log.details}}</p>
+            </mat-menu>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card-content>
+</mat-card>

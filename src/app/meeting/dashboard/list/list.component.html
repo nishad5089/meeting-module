@@ -1,0 +1,136 @@
+<div class="overlay" *ngIf="isLoadingResults">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+
+<mat-card>
+  <table class="table" style="border: none; margin: 0">
+    <tr>
+      <td width="75%" style="border: none; padding: 0">
+        <mat-form-field style="display: inline; width: 30%">
+          <mat-label>{{'শিরোনাম​, স্মারক নং, আলোচ্য বিষ​য়​, নোট​, আলোচনা, সিদ্ধান্ত বা বাস্তবায়ন'}}</mat-label>
+          <input matInput [(ngModel)]="dto.searchField" (keydown)="keyDownFunction($event)"
+                 placeholder="{{'শিরোনাম​, স্মারক নং, আলোচ্য বিষ​য়​, নোট​, আলোচনা, সিদ্ধান্ত বা বাস্তবায়নে দিয়ে অনুসন্ধান'}}">
+        </mat-form-field>
+      </td>
+      <td class="float-left" style="border: none; padding: 0; padding-right: 4px">
+        <button class="btn btn-primary" (click)="search(dto)">
+          <i class="fa fa-search"></i>
+        </button>
+      </td>
+      <td class="float-left" style="border: none; padding: 0">
+        <a class="btn btn-secondary"
+           (click)="showFilters=!showFilters">
+          <i class="fa fa-filter"></i> {{'ফিল্টার​'}}
+        </a>
+      </td>
+      <td class="float-right" style="border: none; padding: 0">
+        <button class="btn btn-primary" *ngIf="isMeetingCreator()" (click)="add()">
+          <i class="fa fa-plus"></i> {{'নতুন মিটিং'}}
+        </button>
+      </td>
+    </tr>
+  </table>
+  <mat-card-content [hidden]="!showFilters" style="margin-bottom: 0">
+    <div class="row">
+      <div class="col-md-3">
+        <mat-form-field>
+          <mat-label>{{'তারিখ হতে'}}</mat-label>
+          <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="pickerFrom" readonly
+                 placeholder="{{'তারিখ হতে বাছাই করুন​'}}" [(ngModel)]="dto.meetingSchedule.meetingStartTime">
+          <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFrom></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3">
+        <mat-form-field>
+          <mat-label>{{'তারিখ পর্যন্ত​'}}</mat-label>
+          <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="pickerTo" readonly
+                 placeholder="{{' তারিখ পর্যন্ত বাছাই করুন​​ '}}" [(ngModel)]="dto.meetingSchedule.meetingEndTime">
+          <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+          <mat-datepicker #pickerTo></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <app-rooms
+          [isRequired]="false"
+          [selectedValue]="dto.meetingRoom"
+          (changed)="setMeetingRoom($event)"
+        ></app-rooms>
+      </div>
+
+      <div class="col-md-3">
+        <app-meeting-status
+          [options]="meetingStatuses"
+          [isRequired]="false"
+          [selectedValue]="dto.statusObject"
+          (changed)="setMeetingStatus($event)"
+        >
+        </app-meeting-status>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions [hidden]="!showFilters" align="end" style="margin: 0">
+    <button class="btn btn-secondary btn-filter-reset" (click)="reset()">
+      <i class="fa fa-refresh"></i> {{'রিসেট​'}}
+    </button>
+    <button class="btn btn-primary" (click)="search(dto)">
+      <i class="fa fa-search"></i> {{'অনুসন্ধান করুন​'}}
+    </button>
+  </mat-card-actions>
+</mat-card>
+<br/>
+<div>
+  <div class="mem-list-table-container">
+    <table mat-table class="mem-table-full-width" [dataSource]="dataSource" matSort style="align-content: center">
+      <!-- Serial No -->
+      <ng-container matColumnDef="serialNo">
+        <th mat-header-cell *matHeaderCellDef style="width: 7%; text-align: center; padding-left: 12px"> {{'ক্রমিক নং'}} </th>
+        <td mat-cell *matCellDef="let element; let i = index"> {{i + 1 | localNumber}} </td>
+      </ng-container>
+
+      <!-- Meeting Title -->
+      <ng-container matColumnDef="meetingTitle">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 45%"> {{'শিরোনাম'}} </th>
+        <td mat-cell *matCellDef="let element" style="text-align: left"> {{element.meetingTitle}} </td>
+      </ng-container>
+
+      <!-- Date-Time -->
+      <ng-container matColumnDef="dateTime">
+        <th mat-header-cell *matHeaderCellDef style="width: 15%; text-align: center"> {{'তারিখ ও সময়'}} </th>
+        <td mat-cell *matCellDef="let element" style="text-align: left"> {{element.meetingSchedule?.meetingDate | date: 'fullDate' | localNumber}}
+          <br> {{element.meetingSchedule?.meetingStartTime | date: 'bbbb hh:mm' | localNumber}}
+          -{{element.meetingSchedule?.meetingEndTime | date: 'bbbb hh:mm' | localNumber}} </td>
+      </ng-container>
+
+      <!-- Room -->
+      <ng-container matColumnDef="room">
+        <th mat-header-cell *matHeaderCellDef style="width: 15%; text-align: center"> {{'কক্ষ'}} </th>
+        <td mat-cell *matCellDef="let element"> {{setRoomDetails(element.meetingSchedule?.room)}} </td>
+      </ng-container>
+
+      <!-- Meeting Status -->
+      <ng-container matColumnDef="meetingStatus">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 18%"> {{' অবস্থা '}} </th>
+        <td mat-cell *matCellDef="let element">
+          <span class="{{getColorClass(element.meetingStatus)}} meeting-status-badge">
+            {{getStatus(element.meetingStatus)}}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="disclaimer">
+        <td mat-footer-cell *matFooterCellDef colspan="6" align="center">
+          {{'কোনো মিটিং পাওয়া যায়নি'}}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+      <tr [hidden]="dataSource?.data.length === 0" mat-row *matRowDef="let row; columns: displayColumns;"
+          (click)="goToDetails(row)"></tr>
+      <tr [hidden]="dataSource?.data.length !== 0" mat-footer-row *matFooterRowDef="['disclaimer']"
+          class="example-second-footer-row"></tr>
+    </table>
+  </div>
+  <mat-paginator [pageSizeOptions]="[25, 50, 100, 200]"></mat-paginator>
+</div>

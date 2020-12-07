@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-md-11 text-left">
+    <h1 mat-dialog-title>{{data.date | date: 'fullDate' | localNumber}} তারিখে অনুষ্ঠিতব্য মিটিংসমূহ​</h1>
+  </div>
+  <div class="col-md-1 text-left">
+    <button mat-icon-button color="warn" (click)="onNoClick()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<div mat-dialog-content>
+  <app-alert></app-alert>
+  <br/>
+  <mat-card style="background: #b0bec5">
+    <mat-card-content>
+      <div [hidden]="dataSource.data.length === 0">
+        <table mat-table [dataSource]="dataSource" class="mem-table-full-width" matSort>
+          <!--Serial-->
+          <ng-container matColumnDef="sl">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Sl</th>
+            <td mat-cell *matCellDef="let element; let i = index">{{i + 1 | localNumber}}</td>
+          </ng-container>
+          <!--Meeting Title-->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+            <td mat-cell *matCellDef="let element">{{element.title}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayColumns" (click)="goToDetails(row.id)"></tr>
+        </table>
+      </div>
+      <div [hidden]="dataSource.data.length !== 0">
+        {{'কোনো মিটিং পাওয়া যায়নি'}}
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div mat-dialog-actions align="end">
+  <button [hidden]="!isDateValid()" *ngIf="isMeetingCreator()" mat-mini-fab color="primary" matTooltip="{{'নতুন​ মিটিং যোগ করুন​'}}"
+          [mat-dialog-close]="data.date" cdkFocusInitial>
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

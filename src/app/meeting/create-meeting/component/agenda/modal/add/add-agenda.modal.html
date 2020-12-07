@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>{{'আলোচ্য বিষয় যোগ করুন'}}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>{{'আলোচ্য বিষয় এর নাম'}}</mat-label>
+    <textarea matInput placeholder="আলোচ্য বিষয় লিখুন" [required]="true" [(ngModel)]="str"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="accent" style="float:right; margin:5px" (click)="closeModal()">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="sendData()">{{' সংরক্ষন করুন'}}</button>
+</div>

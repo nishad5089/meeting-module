@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>{{'নথি আপলোডকরণ​'}}</h1>
+<div mat-dialog-content>
+  <input type="file" accept="application/msword, application/pdf, application/vnd.ms-excel, text/plain"
+         (change)="addNew($event)">
+  <mat-form-field>
+    <mat-label>{{'নথির নাম'}}</mat-label>
+    <input matInput placeholder="{{'নথির নাম লিখুন​'}}" [(ngModel)]="data.attachment.fileTitle">
+  </mat-form-field>
+
+  <mat-form-field [hidden]="data.attachment.attachmentType !== 'wp' && data.attachment.attachmentType !== 'go'">
+    <mat-label>{{ ' সংযুক্তির ধরণ ' }}</mat-label>
+    <mat-select placeholder="সংযুক্তির ধরণ নির্বাচন করুন" [(ngModel)]="data.attachment.attachmentType" required>
+      <mat-option *ngFor="let x of workingFileOrGo" [value]="x.type">
+        {{ x.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" (click)="onNoClick()">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button color="primary" (click)="upload()" cdkFocusInitial>{{' আপলোড করুন '}}</button>
+</div>

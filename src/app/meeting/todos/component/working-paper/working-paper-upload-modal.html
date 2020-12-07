@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>{{'নথি আপলোডকরণ​'}}</h1>
+<div mat-dialog-content>
+  <input type="file" accept="application/msword, application/pdf, application/vnd.ms-excel, text/plain"
+         maxlength="3145728" (change)="addNew($event)">
+  <mat-form-field>
+    <mat-label>{{'নথির নাম'}}</mat-label>
+    <input matInput placeholder="{{'নথির নাম লিখুন​'}}" (ngModelChange)="preview()" [(ngModel)]="data.attachment.fileTitle">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'মন্তব্য​'}}</mat-label>
+    <textarea  matInput placeholder="{{'মন্তব্য​ লিখুন​'}}" [(ngModel)]="data.attachment.description"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" (click)="onNoClick()">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>{{' সংরক্ষণ করুন​ '}}</button>
+</div>

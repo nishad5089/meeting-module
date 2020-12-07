@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-md-11 text-left">
+    <h1 mat-dialog-title></h1>
+  </div>
+  <div class="col-md-1 text-left">
+    <button mat-icon-button color="warn" (click)="onNoClick()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<div class="overlay"
+     [hidden]="!loading">
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<div mat-dialog-content style="overflow: unset">
+  <app-alert></app-alert>
+  <div [hidden]="!data.generate">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label>{{'টেমপ্লেট'}}</mat-label>
+          <mat-select placeholder="{{'টেমপ্লেট বাছাই করুন'}}" [(ngModel)]="templateOid" [required]="true">
+            <mat-option>{{' - '}}</mat-option>
+            <mat-option *ngFor="let template of templates" [value]="template.fileOid">
+              {{template.templateTitle}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-form-field [hidden]="data.value !== 'resolution'">
+          <mat-label>{{'কার্যবিবরণীর স্মারক নং '}}</mat-label>
+          <input placeholder="{{'কার্যবিবরণীর স্মারক নং লিখুন​ '}}" matInput [(ngModel)]="resolutionMemorandumNumber"
+                 type="text" [required]="true">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-menu #appMenu="matMenu" yPosition="below">
+      <button mat-menu-item (click)="downloadFile()">PDF</button>
+      <button mat-menu-item (click)="downloadDocFile()">docx</button>
+    </mat-menu>
+
+    <div class="row" style="padding-bottom: 10px;">
+      <div class="col-md-4" style="text-align: center;">
+        <button [disabled]="!showFile" mat-raised-button style="background: #b0bec5; width: 300px;"
+                [matMenuTriggerFor]="appMenu">{{'ডাউনলোড​ করুন'}}</button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">
+        <button [disabled]="!showFile || data.value === 'file'" mat-raised-button
+                style="background: #b0bec5; width: 300px;"
+                (click)="sendForApproval()">{{'অনুমোদনের জন্য প্রেরণ করুন'}}</button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">
+        <button mat-raised-button color="primary" [disabled]="disabled()"
+                style="width: 300px;"
+                (click)="generateFile()">{{'দাখিল করুন​'}}</button>
+      </div>
+    </div>
+  </div>
+
+  <div [hidden]="!showFile">
+    <ngx-extended-pdf-viewer [src]="data.file" [delayFirstView]="1000"
+                             [showPrintButton]="false" [filenameForDownload]="data.file?.name"
+                             [height]="height" [useBrowserLocale]="true"></ngx-extended-pdf-viewer>
+  </div>
+
+</div>
+<div mat-dialog-actions align="end">
+
+</div>

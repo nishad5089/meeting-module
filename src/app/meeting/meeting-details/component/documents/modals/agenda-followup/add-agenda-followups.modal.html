@@ -1,0 +1,83 @@
+<h1 mat-dialog-title >{{ getTitle() }}</h1>
+<div mat-dialog-content>
+  <table width="100%">
+    <tr>
+      <td>
+        <app-meeting-agenda
+          [options]="data.agendas"
+          [isRequired]="true"
+          [selectedValue]="agendaForEdit"
+          (changed)="setAgenda($event)"
+        >
+        </app-meeting-agenda>
+        <br>
+        <mat-form-field class="example-tile">
+          <mat-label>{{'আলোচনা'}}</mat-label>
+          <textarea matInput placeholder="{{'আলোচনা লিখুন​'}}"
+                    [(ngModel)]="copyAgendaFollowup.discussion" [required]="true"></textarea>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-tile">
+          <mat-label>{{'সিদ্ধান্ত​ '}}</mat-label>
+          <textarea matInput placeholder="{{'সিদ্ধান্ত লিখুন​​'}}"
+                    [(ngModel)]="copyAgendaFollowup.decision"></textarea>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-tile">
+          <mat-label>{{'বাস্তবায়নে '}}</mat-label>
+          <textarea matInput placeholder="{{'বাস্তবায়নে লিখুন​​'}}"
+                    [(ngModel)]="copyAgendaFollowup.responsibleEntity"></textarea>
+        </mat-form-field>
+      </td>
+      <td>
+        <div>
+          <table style="justify-content: flex-start !important; align-items: flex-start !important; width: 100%"
+                 mat-table [dataSource]="relatedNotes">
+            <!-- Speaker Column -->
+            <ng-container matColumnDef="Speaker">s
+              <th mat-header-cell *matHeaderCellDef>{{ ' বক্তা ' }}</th>
+              <td mat-cell *matCellDef="let row"> {{ getEmployeeName(row.speaker) }} </td>
+            </ng-container>
+
+            <!-- Note Column -->
+            <ng-container matColumnDef="Note">
+              <th mat-header-cell *matHeaderCellDef> {{ ' নোট ' }}</th>
+              <td mat-cell *matCellDef="let row"> {{ row.note }} </td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> {{ ' অ্যাকশন ' }}</th>
+              <td mat-cell *matCellDef="let row">
+                <button mat-icon-button color="warn" style="float:inherit;"
+                  (click)="addDiscussion(getEmployeeName(row.speaker), row.note)"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="disclaimer">
+              <td mat-footer-cell *matFooterCellDef colspan="5">
+                {{'কোনো আলোচ্য বিষয় বা নোট পাওয়া যায়নি'}}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['Speaker', 'Note', 'actions']"></tr>
+            <tr [hidden]="relatedNotes.data.length === 0" mat-row *matRowDef="let row; columns: ['Speaker', 'Note', 'actions'];">
+            </tr>
+            <tr [hidden]="relatedNotes.data.length !== 0" mat-footer-row *matFooterRowDef="['disclaimer']" class="example-second-footer-row"></tr>
+            <mat-paginator [pageSizeOptions]="[25, 50, 100, 200]"
+                           showFirstLastButtons></mat-paginator>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<div mat-dialog-actions class="example-button-row" align="end">
+  <button mat-raised-button color="warn" style="float:right; margin:5px" (click)="closeModal()">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button color="primary" style="float:right; margin:5px" (click)="saveAgendaFollowup()"
+          cdkFocusInitial>{{' সংরক্ষন করুন'}}
+  </button>
+</div>

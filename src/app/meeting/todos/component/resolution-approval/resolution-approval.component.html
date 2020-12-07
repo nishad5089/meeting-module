@@ -1,0 +1,71 @@
+<mat-card style="min-height: 55vh;">
+  <div class="overlay"
+       *ngIf="isLoadingResults">
+    <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+  </div>
+  <mat-card-header><h4>{{'কার্যবিবরণী অনুমোদনের অনুরোধসমূহ​'}}</h4></mat-card-header>
+  <mat-card-content>
+    <div>
+      <div class="mem-list-table-container">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- Serial No -->
+          <ng-container matColumnDef="serialNo">
+            <th mat-header-cell *matHeaderCellDef>{{' ক্রমিক নং '}}</th>
+            <td mat-cell *matCellDef="let element; let i = index">{{i + 1 | localNumber}}</td>
+          </ng-container>
+          <!-- meetingTitle -->
+          <ng-container matColumnDef="meetingTitle">
+            <th mat-header-cell *matHeaderCellDef>{{' মিটিংয়ের শিরোনাম​ '}}</th>
+            <td mat-cell *matCellDef="let element">{{element.meetingTitle}}</td>
+          </ng-container>
+          <!-- Date-Time -->
+          <ng-container matColumnDef="dateTime">
+            <th mat-header-cell *matHeaderCellDef>{{' তারিখ​-সময়​ '}}</th>
+            <td mat-cell *matCellDef="let element">{{element.meetingDate | date: 'fullDate' | localNumber}} <br>
+              {{element.meetingStartTime | date: 'bbbb hh:mm' | localNumber}}-{{element.meetingEndTime | date: 'bbbb hh:mm' | localNumber}}
+            </td>
+          </ng-container>
+          <!-- Status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>{{' অবস্থা '}}</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon style="color: green !important;" matTooltip="মূলতবি">help</mat-icon>
+            </td>
+          </ng-container>
+          <!-- Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{' অ্যাকশন '}}</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button style="color: firebrick !important;" matTooltip="কার্যবিবরণী দেখুন​"
+                      (click)="getFile(element)">
+                <mat-icon>picture_as_pdf</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="অনুমোদন করুন​"
+                      (click)="openConfirmationDialog(element, 'approve')"
+                      [disabled]="element.meetingStatus !== 'resolution_sent_for_approval'">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" matTooltip="সংশোধনের জন্য পাঠান​"
+                      (click)="openConfirmationDialog(element, 'correction')"
+                      [disabled]="element.meetingStatus !== 'resolution_sent_for_approval'">
+                <mat-icon>forward</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="disclaimer">
+            <td mat-footer-cell *matFooterCellDef colspan="5">
+              {{'কোনো অনুরোধ​ পাওয়া যায়নি'}}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+          <tr [hidden]="dataSource?.data.length === 0" mat-row *matRowDef="let row; columns: displayColumns"></tr>
+          <tr [hidden]="dataSource?.data.length !== 0" mat-footer-row *matFooterRowDef="['disclaimer']"
+              class="example-second-footer-row"></tr>
+        </table>
+      </div>
+      <mat-paginator [pageSizeOptions]="[25, 50, 100, 200]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

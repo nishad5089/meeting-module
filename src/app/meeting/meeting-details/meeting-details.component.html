@@ -1,0 +1,65 @@
+<div class="overlay"
+     [hidden]="!isLoadingResults">
+<!--  <mat-spinner diameter="50" *ngIf="isLoadingResults"></mat-spinner>-->
+  <img src="assets/img/brand/loader_colored.gif" class="spinner" style="height: 200px; width: 200px">
+</div>
+<mat-card>
+  <mat-card-content>
+    <h6>{{ 'স্মারক নম্বর ' }} : {{meetingDetails?.memorandumNumber}}</h6>
+    <div class="row">
+      <div class="col-md-9">
+        <h3>{{meetingDetails?.meetingTitle}}</h3>
+      </div>
+      <div class="col-md-3" style="text-align: right">
+        <span class="{{getColorClass()}} meeting-status-badge">
+            {{getStatus()}}
+          </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        {{' তৈরি করেছেন​ '}} : {{meetingDetails?.creator?.name}}, {{meetingDetails?.creator?.designationName}}
+        , {{meetingDetails?.creator?.orgName}}
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-tab-group [(selectedIndex)]="selectedIndex" mat-stretch-tabs>
+  <mat-tab label="প্রেক্ষাপট">
+    <app-background-details [meetingOid]="meetingOid"
+                            (backgroundEvent)="getBackgroundInfo($event)"></app-background-details>
+  </mat-tab>
+  <mat-tab label="মৌলিক তথ্য">
+    <app-basic-info-details (indexEvent)="setIndex($event)"
+                            [permissionMap]="permissions"
+                            [meetingOid]="meetingOid"
+                            (loadingEvent)="setLoadingEvent($event)"
+                            (basicInfoEvent)="getBasicInfo($event)"></app-basic-info-details>
+  </mat-tab>
+  <mat-tab label="সদস্যগণ">
+    <app-members [meetingOid]="meetingOid"
+                 [permissionMap]="permissions"
+                 (loadingEvent)="setLoadingEvent($event)"
+                 (inviteesEvent)="getInviteesInfo($event)"></app-members>
+  </mat-tab>
+  <mat-tab label="নথি পত্র">
+    <app-documents [meetingOid]="meetingOid"
+                   (attachmentEvent)="getAttachmentInfo($event)"
+                   [invitees]="invitees"
+                   (loadingEvent)="setLoadingEvent($event)"
+                   [agendas]="meetingDetails?.agendas"
+                   [permissionMap]="permissions"></app-documents>
+  </mat-tab>
+  <mat-tab label="ঘটনা প্রবাহ​">
+    <app-action-log [meetingOid]="meetingOid"
+                    [selectedIndex]="selectedIndex"
+                    (loadingEvent)="setLoadingEvent($event)"></app-action-log>
+  </mat-tab>
+</mat-tab-group>
+<app-speed-dial-fab class="speed-dial-container"
+                    [hidden]="hideFabs()"
+                    [ngClass]="speedDialFabPosition"
+                    style="position: absolute"
+                    (fabClick)="onSpeedDialFabClicked($event)"
+                    [buttons]="speedDialFabButtons"></app-speed-dial-fab>
+<br/>

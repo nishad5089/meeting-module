@@ -1,0 +1,22 @@
+<h4 mat-dialog-title>{{ data.dialogTitle }}</h4>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>{{' কর্মকর্তা *'}}</mat-label>
+    <div>
+      <input [formControl]="employeeField" type="text"
+             placeholder="{{'কর্মকর্তা বাছাই করুন'}}" matInput [matAutocomplete]="auto1">
+      <mat-autocomplete [displayWith]="displayFn"
+                        autoActiveFirstOption #auto1="matAutocomplete">
+        <mat-option *ngFor="let opt of filteredEmployee$ | async; let index = index" [value]="opt">
+          {{ displayFn(opt) }}
+        </mat-option>
+      </mat-autocomplete>
+    </div>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="accent" [mat-dialog-close]="">{{' বন্ধ​ করুন'}}</button>
+  <button mat-raised-button color="primary" [disabled]="data.dto.employeeOid == undefined || data.dto.employeeOid == ''"
+          [mat-dialog-close]="data.dto">{{'সংরক্ষণ করুন'}}</button>
+</div>
